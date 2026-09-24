@@ -3,7 +3,7 @@
 <title>Lamex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --void:#09090b;
@@ -125,31 +125,6 @@
   .lang-btn.active{color:var(--void);background:var(--chrome-hi);}
   .lang-btn:not(.active):hover{color:var(--text);}
 
-  .theme-switch{display:flex;gap:6px;flex:0 0 auto;}
-  .theme-btn{
-    position:relative;width:24px;height:24px;padding:0;border-radius:6px;
-    border:1.5px solid var(--chrome-mid);background:var(--panel-2);color:var(--chrome-hi);
-    cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:visible;
-    transition:border-color .2s ease, transform .2s ease;
-  }
-  .theme-btn svg{width:16px;height:16px;display:block;border-radius:3px;overflow:hidden;}
-  .theme-btn.active{border-color:var(--glow);box-shadow:0 0 0 1px var(--glow) inset;}
-  .theme-btn--stub{opacity:.65;}
-  .theme-btn:hover{transform:translateY(-1px);border-color:var(--chrome-hi);}
-  .theme-btn--flash::after{
-    content:attr(data-flash);position:absolute;top:calc(100% + 8px);right:0;z-index:5;
-    background:rgba(9,9,11,.92);border:1px solid var(--chrome-mid);color:var(--text);
-    font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.04em;
-    padding:5px 9px;border-radius:6px;white-space:nowrap;pointer-events:none;
-    animation:themeFlash 1.4s ease forwards;
-  }
-  @keyframes themeFlash{
-    0%{opacity:0;transform:translateY(-4px);}
-    12%{opacity:1;transform:translateY(0);}
-    82%{opacity:1;}
-    100%{opacity:0;}
-  }
-
   /* on narrow screens the tabs don't fit on one line with the brand — let
      them wrap onto their own row(s) instead of being cut off by the
      horizontal-scroll behavior used on desktop; actual header height is
@@ -164,9 +139,6 @@
     .nav-tools{order:2;margin-left:auto;gap:8px;}
     nav.links{order:3;flex:0 0 100%;overflow-x:visible;flex-wrap:wrap;gap:8px 18px;}
     .lang-btn{padding:4px 8px;font-size:0.62rem;}
-    .theme-switch{gap:4px;}
-    .theme-btn{width:20px;height:20px;border-radius:5px;}
-    .theme-btn svg{width:13px;height:13px;}
   }
   /* ---------- PAGED FULLSCREEN STAGE ---------- */
   #stage{position:fixed;inset:0;}
@@ -610,477 +582,6 @@
     position:absolute;left:0;right:0;bottom:22px;text-align:center;
   }
 
-  /* =====================================================================
-     THEME: WINDOWS XP (Luna) — everything below is scoped under
-     [data-theme="xp"] and leaves the default theme completely untouched.
-     The page layout/structure stays identical; this reskins colors, type
-     and chrome to a "classic beveled dialog on a blue desktop" look:
-     the info-cards / carousel tiles / modals become beige 3D-bordered
-     windows, headings/labels floating directly on the blue background go
-     white, and the organic node shapes get a silver button gradient
-     (defined as extra SVG gradients in the Design section's <defs>).
-     ===================================================================== */
-  :root[data-theme="xp"]{
-    --void:#ece9d8;
-    --panel:#f6f4ec;
-    --panel-2:#d9d6c4;
-    --line:#8f8d7d;
-    --chrome-hi:#ffffff;
-    --chrome-mid:#d3d0c0;
-    --chrome-lo:#6f6d5e;
-    --text:#0a0a0a;
-    --muted:#4d4b3f;
-    --glow:#1f4fd8;
-  }
-  [data-theme="xp"] body{
-    background:linear-gradient(160deg,#0a3fae 0%,#1e63d6 35%,#4a97e6 68%,#86c2f2 100%);
-  }
-  [data-theme="xp"] body,
-  [data-theme="xp"] h1, [data-theme="xp"] h2, [data-theme="xp"] h3,
-  [data-theme="xp"] .mono, [data-theme="xp"] .eyebrow,
-  [data-theme="xp"] .car-more, [data-theme="xp"] .lightbox-hint, [data-theme="xp"] .fine{
-    font-family:Tahoma, Verdana, "Segoe UI", Arial, sans-serif !important;
-  }
-  [data-theme="xp"] ::selection{background:#2a5ddb;color:#fff;}
-
-  /* headings that float directly on the blue desktop background */
-  [data-theme="xp"] .chrome,
-  [data-theme="xp"] .section-head h2 .chrome-txt,
-  [data-theme="xp"] .contact h2,
-  [data-theme="xp"] .car-title,
-  [data-theme="xp"] .car-title-below{
-    background:none;-webkit-background-clip:initial;background-clip:initial;
-    color:#fff;-webkit-text-fill-color:#fff;animation:none;
-    text-shadow:1px 1px 2px rgba(0,0,0,.55);
-  }
-  /* a heading inside a beige dialog box (gallery / player modal title) */
-  [data-theme="xp"] #modalContent h2{
-    background:none;-webkit-background-clip:initial;background-clip:initial;
-    color:#0a246a;-webkit-text-fill-color:#0a246a;animation:none;
-  }
-  /* muted/secondary text that also floats directly on the blue background */
-  [data-theme="xp"] .eyebrow,
-  [data-theme="xp"] .section-hint,
-  [data-theme="xp"] .car-desc,
-  [data-theme="xp"] .contact .wrap > p,
-  [data-theme="xp"] .fine,
-  [data-theme="xp"] .lightbox-hint,
-  [data-theme="xp"] .scroll-hint{
-    color:rgba(255,255,255,.88) !important;
-    text-shadow:1px 1px 2px rgba(0,0,0,.5);
-  }
-
-  /* header becomes a Luna-blue title bar */
-  [data-theme="xp"] header.nav{
-    background:linear-gradient(180deg,#2a6bdf 0%,#1957d6 8%,#0e46c6 50%,#1252c9 92%,#0a3aa6 100%);
-    backdrop-filter:none;-webkit-backdrop-filter:none;
-    border-bottom:2px solid #0a2a7a;
-    box-shadow:0 2px 6px rgba(0,0,0,.4);
-  }
-  [data-theme="xp"] .brand{
-    background:linear-gradient(180deg, #8ee060 0%, #5cbf2c 42%, #3a9c15 55%, #2f7a0e 100%);
-    border:1px solid #1f5c08;border-radius:20px;
-    padding:5px 16px 5px 10px;margin:0;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.6), inset 0 -3px 5px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.35);
-    transition:filter .15s ease, transform .1s ease;
-  }
-  [data-theme="xp"] .brand:hover{filter:brightness(1.08);}
-  [data-theme="xp"] .brand:active{transform:translateY(1px);box-shadow:inset 0 2px 5px rgba(0,0,0,.45);}
-  [data-theme="xp"] .brand span{color:#fff;-webkit-text-fill-color:#fff;text-shadow:1px 1px 1px rgba(0,0,0,.5);animation:none;background:none;}
-  [data-theme="xp"] nav.links a{
-    color:#dbe8ff;text-transform:none;letter-spacing:0;font-weight:bold;
-    padding:5px 10px;border-radius:3px;border-bottom:none;
-  }
-  [data-theme="xp"] nav.links a.current,
-  [data-theme="xp"] nav.links a:hover, [data-theme="xp"] nav.links a:focus-visible{
-    color:#fff;background:rgba(255,255,255,.18);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);
-  }
-  [data-theme="xp"] .lang-toggle{border-radius:3px;border-color:#0a2a7a;}
-  [data-theme="xp"] .lang-btn{color:#dbe8ff;}
-  [data-theme="xp"] .lang-btn.active{background:#fff;color:#0a246a;}
-  [data-theme="xp"] .theme-btn{border-radius:3px;border-color:#0a2a7a;background:linear-gradient(180deg,#fff,#d4d0c8);}
-  [data-theme="xp"] .theme-btn.active{box-shadow:inset 1px 1px 3px rgba(0,0,0,.5);}
-
-  /* beveled "dialog window" boxes: intro cards + carousel picture frame + modals */
-  [data-theme="xp"] .info-card, [data-theme="xp"] .car-tile, [data-theme="xp"] .modal-box{
-    background:var(--panel);
-    border:2px solid;border-color:var(--chrome-hi) var(--chrome-lo) var(--chrome-lo) var(--chrome-hi);
-    box-shadow:inset -1px -1px 0 var(--chrome-mid), inset 1px 1px 0 #fff, 2px 3px 8px rgba(0,0,0,.35);
-    backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
-    border-radius:3px;
-  }
-  [data-theme="xp"] .info-card{padding:18px;}
-  [data-theme="xp"] .about-card{border-right-width:2px;padding-right:18px;}
-  [data-theme="xp"] .fact-card{border-left-width:2px;padding-left:18px;}
-  [data-theme="xp"] .car-tile::before, [data-theme="xp"] .car-tile::after{display:none;}
-  [data-theme="xp"] .modal-box::before{display:none;}
-  [data-theme="xp"] .car-more{
-    background:linear-gradient(180deg,#fff,#d8d4c8);color:#0a246a;border:1px solid #6f6d5e;text-transform:none;
-  }
-  [data-theme="xp"] .car-more:hover{border-color:#0a246a;box-shadow:none;color:#0a246a;}
-
-  /* classic red XP close buttons */
-  [data-theme="xp"] .modal-close, [data-theme="xp"] .lightbox-close{
-    border-radius:2px;width:22px;height:20px;
-    background:linear-gradient(180deg,#f6a19c,#e04b42 45%,#c22a22);
-    border:1px solid #7a1410;color:#fff;font-weight:bold;
-    box-shadow:inset 1px 1px 0 rgba(255,255,255,.5);backdrop-filter:none;
-  }
-  [data-theme="xp"] .modal-close:hover, [data-theme="xp"] .lightbox-close:hover{
-    background:linear-gradient(180deg,#ff9a94,#f0392f 45%,#d21f16);box-shadow:none;color:#fff;
-  }
-
-  /* node "buttons": silver bevel fill/stroke (extra gradients defined in the
-     Design section's <defs>, referenced here the same way the default
-     theme references #nodeFill/#nodeStroke) + flat navy icon + outlined
-     white label so it stays legible over both the blue desktop and busy
-     hover states */
-  [data-theme="xp"] .node-shape{
-    fill:url(#nodeFillXP);stroke:url(#nodeStrokeXP);stroke-width:1.5px;
-    filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));
-  }
-  [data-theme="xp"] .node:hover .node-shape, [data-theme="xp"] .node:focus-visible .node-shape,
-  [data-theme="xp"] .node-link:focus-visible .node-shape{
-    fill:url(#nodeFillXPHover);stroke:url(#nodeStrokeXP);transform:none;
-  }
-  [data-theme="xp"] .node-icon{stroke:#0a246a;transform:none !important;}
-  [data-theme="xp"] .node-icon .fill{fill:#0a246a;}
-  [data-theme="xp"] .node:hover .node-icon, [data-theme="xp"] .node:focus-visible .node-icon,
-  [data-theme="xp"] .node-link:focus-visible .node-icon{stroke:#0a246a;}
-  [data-theme="xp"] .node:hover .node-icon .fill, [data-theme="xp"] .node:focus-visible .node-icon .fill,
-  [data-theme="xp"] .node-link:focus-visible .node-icon .fill{fill:#0a246a;}
-  [data-theme="xp"] .node-text{
-    fill:#fff;font-family:Tahoma, Verdana, sans-serif;font-weight:bold;
-    paint-order:stroke;stroke:#0a246a;stroke-width:3px;stroke-linejoin:round;
-  }
-  [data-theme="xp"] .conn-glow{stroke:#fff;opacity:.25;}
-  [data-theme="xp"] .conn-line{stroke:#fff;opacity:.7;}
-  [data-theme="xp"] .dot-vis{fill:#fff;stroke:#0a246a;}
-  [data-theme="xp"] .dot-vis.active{fill:#0a246a;filter:none;}
-
-  /* mini-player: a small blue taskbar-style dock instead of a glass pill */
-  [data-theme="xp"] .mini-player{
-    border-radius:4px;
-    background:linear-gradient(180deg,#3e8ef2,#1c5fd6 12%,#1450bd 88%,#0d3a94);
-    border:1px solid #0a2a7a;box-shadow:0 2px 6px rgba(0,0,0,.4);
-    backdrop-filter:none;-webkit-backdrop-filter:none;
-  }
-  [data-theme="xp"] .mini-btn{background:linear-gradient(180deg,#fff,#cfd0d2);border:1px solid #5c5c5c;color:#111;}
-  [data-theme="xp"] .mini-btn:hover{background:linear-gradient(180deg,#fff,#e6e6e6);}
-  [data-theme="xp"] .mini-close{background:linear-gradient(180deg,#f6a19c,#c22a22);color:#fff;}
-  [data-theme="xp"] .mini-close:hover{background:linear-gradient(180deg,#ff9a94,#d21f16);}
-
-  /* preloader stays on a dark blue so the white logo mark keeps showing */
-  [data-theme="xp"] .preloader{background:#0e46c6;}
-  [data-theme="xp"] .preloader-pct{color:#fff;}
-
-  /* =====================================================================
-     THEME: MINECRAFT — same scoping approach as the XP theme above: a
-     sky-blue/dirt backdrop, classic inventory-GUI gray panels (thick
-     pixel bevel, square corners, no blur), a dark HUD-style header so the
-     white logo mark keeps showing, grass-block node buttons (extra SVG
-     gradients in the Design section's <defs>, same pattern as the XP
-     ones), and the "Press Start 2P" pixel font on short labels/headings
-     only — body paragraphs stay in the readable default font.
-     ===================================================================== */
-  :root[data-theme="minecraft"]{
-    --void:#c6c6c6;
-    --panel:#c6c6c6;
-    --panel-2:#8b8b8b;
-    --line:#373737;
-    --chrome-hi:#ffffff;
-    --chrome-mid:#8b8b8b;
-    --chrome-lo:#373737;
-    --text:#2b2b2b;
-    --muted:#4a4a4a;
-    --glow:#4aa72e;
-  }
-  [data-theme="minecraft"] body{
-    background-image:
-      repeating-linear-gradient(90deg, #6b4a2a 0 16px, #7a5730 16px 32px),
-      linear-gradient(180deg, #6fb8ef 0%, #a9dcf5 55%, #cdeaff 100%);
-    background-position:bottom left, top left;
-    background-size:100% 40px, 100% 100%;
-    background-repeat:repeat-x, no-repeat;
-    background-attachment:fixed, fixed;
-  }
-  [data-theme="minecraft"] ::selection{background:#4aa72e;color:#fff;}
-
-  /* pixel font on short, layout-safe labels/headings only — never on
-     paragraph text or anything that can hold an arbitrarily long track/
-     item name without overflow protection (those stay in the default
-     font so long strings don't wrap letter-by-letter or bust their box) */
-  [data-theme="minecraft"] h1, [data-theme="minecraft"] h2, [data-theme="minecraft"] h3,
-  [data-theme="minecraft"] nav.links a, [data-theme="minecraft"] .brand span,
-  [data-theme="minecraft"] .lang-btn, [data-theme="minecraft"] .car-more,
-  [data-theme="minecraft"] .fine, [data-theme="minecraft"] .eyebrow,
-  [data-theme="minecraft"] .fact-card dt,
-  [data-theme="minecraft"] .node-text{
-    font-family:'Press Start 2P', monospace !important;
-  }
-
-  /* headings that float directly on the sky background */
-  [data-theme="minecraft"] .chrome,
-  [data-theme="minecraft"] .section-head h2 .chrome-txt,
-  [data-theme="minecraft"] .contact h2,
-  [data-theme="minecraft"] .car-title,
-  [data-theme="minecraft"] .car-title-below{
-    background:none;-webkit-background-clip:initial;background-clip:initial;
-    color:#fff;-webkit-text-fill-color:#fff;animation:none;
-    text-shadow:2px 2px 0 #3f3f3f;font-size:0.85em;line-height:1.6;
-  }
-  /* a heading inside a light-gray dialog box (gallery / player modal title) */
-  [data-theme="minecraft"] #modalContent h2{
-    background:none;-webkit-background-clip:initial;background-clip:initial;
-    color:#2b2b2b;-webkit-text-fill-color:#2b2b2b;animation:none;font-size:0.8em;
-  }
-  [data-theme="minecraft"] .eyebrow,
-  [data-theme="minecraft"] .section-hint,
-  [data-theme="minecraft"] .car-desc,
-  [data-theme="minecraft"] .contact .wrap > p,
-  [data-theme="minecraft"] .fine,
-  [data-theme="minecraft"] .lightbox-hint,
-  [data-theme="minecraft"] .scroll-hint{
-    color:#fff !important;text-shadow:1px 1px 0 #3f3f3f;
-  }
-  [data-theme="minecraft"] .section-hint, [data-theme="minecraft"] .fine, [data-theme="minecraft"] .lightbox-hint{font-size:0.6rem;}
-
-  /* header: dark HUD bar so the white logo mark stays visible, with
-     classic Minecraft "GUI button" tabs (light-gray face, pixel bevel) */
-  [data-theme="minecraft"] header.nav{
-    background:linear-gradient(180deg, rgba(43,43,43,.92), rgba(20,20,20,.92));
-    backdrop-filter:none;-webkit-backdrop-filter:none;
-    border-bottom:4px solid #000;
-    box-shadow:0 2px 0 rgba(0,0,0,.3);
-  }
-  [data-theme="minecraft"] .brand span{
-    color:#fff;-webkit-text-fill-color:#fff;text-shadow:2px 2px 0 #000;animation:none;background:none;font-size:0.65rem;
-  }
-  [data-theme="minecraft"] nav.links a{
-    color:#2b2b2b;text-transform:none;letter-spacing:0;font-size:0.55rem;
-    background:linear-gradient(180deg,#e2e2e2,#a8a8a8);
-    border:2px solid;border-color:#fff #545454 #545454 #fff;
-    padding:6px 8px;border-radius:0;border-bottom-width:2px;
-  }
-  [data-theme="minecraft"] nav.links a.current,
-  [data-theme="minecraft"] nav.links a:hover, [data-theme="minecraft"] nav.links a:focus-visible{
-    border-color:#545454 #fff #fff #545454;
-    background:linear-gradient(180deg,#a8a8a8,#c6c6c6);color:#000;
-  }
-  [data-theme="minecraft"] .lang-toggle{
-    border-radius:0;border:2px solid;border-color:#fff #545454 #545454 #fff;
-    background:linear-gradient(180deg,#e2e2e2,#a8a8a8);
-  }
-  [data-theme="minecraft"] .lang-btn{color:#2b2b2b;font-size:0.55rem;}
-  [data-theme="minecraft"] .lang-btn.active{background:#4aa72e;color:#fff;}
-  [data-theme="minecraft"] .theme-btn{
-    border-radius:0;border:2px solid;border-color:#fff #545454 #545454 #fff;
-    background:linear-gradient(180deg,#e2e2e2,#a8a8a8);
-  }
-  [data-theme="minecraft"] .theme-btn.active{border-color:#545454 #fff #fff #545454;box-shadow:none;}
-
-  /* beveled inventory-style panels: intro cards + carousel picture frame + modals */
-  [data-theme="minecraft"] .info-card, [data-theme="minecraft"] .car-tile, [data-theme="minecraft"] .modal-box{
-    background:#c6c6c6;
-    border:4px solid;border-color:#fff #373737 #373737 #fff;
-    box-shadow:inset -2px -2px 0 #8b8b8b, inset 2px 2px 0 #fff;
-    backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
-    border-radius:0;
-  }
-  [data-theme="minecraft"] .info-card{padding:16px;}
-  [data-theme="minecraft"] .about-card{border-right-width:4px;padding-right:16px;}
-  [data-theme="minecraft"] .fact-card{border-left-width:4px;padding-left:16px;}
-  [data-theme="minecraft"] .car-tile::before, [data-theme="minecraft"] .car-tile::after{display:none;}
-  [data-theme="minecraft"] .modal-box::before{display:none;}
-  [data-theme="minecraft"] .car-more{
-    background:linear-gradient(180deg,#e2e2e2,#a8a8a8);color:#2b2b2b;
-    border:2px solid;border-color:#fff #545454 #545454 #fff;
-    text-transform:none;border-radius:0;font-size:0.5rem;
-  }
-  [data-theme="minecraft"] .car-more:hover{border-color:#545454 #fff #fff #545454;box-shadow:none;color:#2b2b2b;}
-
-  /* pixel-button close controls */
-  [data-theme="minecraft"] .modal-close, [data-theme="minecraft"] .lightbox-close{
-    border-radius:0;width:24px;height:22px;
-    background:linear-gradient(180deg,#e2e2e2,#a8a8a8);
-    border:2px solid;border-color:#fff #545454 #545454 #fff;
-    color:#c0392b;font-weight:bold;backdrop-filter:none;box-shadow:none;
-  }
-  [data-theme="minecraft"] .modal-close:hover, [data-theme="minecraft"] .lightbox-close:hover{
-    border-color:#545454 #fff #fff #545454;color:#e74c3c;box-shadow:none;
-  }
-
-  /* node "buttons": grass-block gradients (defs in the Design section),
-     flat dark-brown icon, outlined pixel label. Hover flips to the
-     dirt-brown gradient, like turning the block over. */
-  [data-theme="minecraft"] .node-shape{
-    fill:url(#nodeFillMC);stroke:url(#nodeStrokeMC);stroke-width:2px;
-    filter:drop-shadow(2px 3px 0 rgba(0,0,0,.35));
-  }
-  [data-theme="minecraft"] .node:hover .node-shape, [data-theme="minecraft"] .node:focus-visible .node-shape,
-  [data-theme="minecraft"] .node-link:focus-visible .node-shape{
-    fill:url(#nodeFillMCHover);stroke:url(#nodeStrokeMC);transform:none;
-  }
-  [data-theme="minecraft"] .node-icon{stroke:#2b1a0a;transform:none !important;}
-  [data-theme="minecraft"] .node-icon .fill{fill:#2b1a0a;}
-  [data-theme="minecraft"] .node:hover .node-icon, [data-theme="minecraft"] .node:focus-visible .node-icon,
-  [data-theme="minecraft"] .node-link:focus-visible .node-icon{stroke:#2b1a0a;}
-  [data-theme="minecraft"] .node:hover .node-icon .fill, [data-theme="minecraft"] .node:focus-visible .node-icon .fill,
-  [data-theme="minecraft"] .node-link:focus-visible .node-icon .fill{fill:#2b1a0a;}
-  [data-theme="minecraft"] .node-text{
-    fill:#fff;font-weight:normal;font-size:11px;
-    paint-order:stroke;stroke:#3f3f3f;stroke-width:3px;stroke-linejoin:round;
-  }
-  [data-theme="minecraft"] .conn-glow{stroke:#fff;opacity:.2;}
-  [data-theme="minecraft"] .conn-line{stroke:#fff;opacity:.65;}
-  [data-theme="minecraft"] .dot-vis{fill:#fff;stroke:#3f3f3f;}
-  [data-theme="minecraft"] .dot-vis.active{fill:#4aa72e;filter:none;}
-
-  /* mini-player: a small inventory-style dock */
-  [data-theme="minecraft"] .mini-player{
-    border-radius:0;
-    background:linear-gradient(180deg,#d8d8d8,#a8a8a8);
-    border:3px solid;border-color:#fff #373737 #373737 #fff;
-    box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
-  }
-  [data-theme="minecraft"] .mini-title{color:#2b2b2b;text-shadow:none;}
-  [data-theme="minecraft"] .mini-artist{color:#5a5a5a;}
-  [data-theme="minecraft"] .mini-btn{
-    border-radius:0;background:linear-gradient(180deg,#e2e2e2,#a8a8a8);
-    border:2px solid;border-color:#fff #545454 #545454 #fff;color:#2b2b2b;
-  }
-  [data-theme="minecraft"] .mini-btn:hover{border-color:#545454 #fff #fff #545454;}
-  [data-theme="minecraft"] .mini-close{
-    border-radius:0;background:linear-gradient(180deg,#e2e2e2,#a8a8a8);color:#c0392b;
-    border:2px solid;border-color:#fff #545454 #545454 #fff;
-  }
-  [data-theme="minecraft"] .mini-close:hover{border-color:#545454 #fff #fff #545454;}
-
-  /* preloader stays dark so the white logo mark keeps showing */
-  [data-theme="minecraft"] .preloader{background:#2b2b2b;}
-  [data-theme="minecraft"] .preloader-pct{color:#fff;font-size:0.5rem;}
-
-  /* =====================================================================
-     THEME: TTY (terminal) — green phosphor text on black, monospace
-     throughout, hollow node "buttons" that invert to solid green on
-     hover/focus like classic reverse-video selection. This theme needs
-     far fewer overrides than XP/Minecraft: the site's default palette is
-     already dark, and most components read --chrome-hi/--chrome-mid/
-     --panel/--glow, so simply repainting those variables green-on-black
-     already carries through borders, gradients, dot/connector colors,
-     the preloader bar, ::selection, etc. without extra rules. Only the
-     handful of spots with a *hardcoded* (non-variable) color below need
-     an explicit override.
-     ===================================================================== */
-  :root[data-theme="tty"]{
-    --void:#000000;
-    --panel:#000000;
-    --panel-2:#001a00;
-    --line:#0a3d1a;
-    --chrome-hi:#00ff66;
-    --chrome-mid:#00cc55;
-    --chrome-lo:#003311;
-    --text:#00ff41;
-    --muted:#00aa33;
-    --glow:#00ff41;
-  }
-  [data-theme="tty"] body{font-family:'IBM Plex Mono', 'Courier New', monospace;}
-  [data-theme="tty"] h1, [data-theme="tty"] h2, [data-theme="tty"] h3{font-family:'IBM Plex Mono',monospace;}
-  [data-theme="tty"] ::selection{background:#00ff41;color:#000;}
-
-  /* faint CRT scanlines, purely decorative and behind every real layer
-     (z-index:1 sits below .screen.active's 2, header's 60, etc.) */
-  [data-theme="tty"] body::before{
-    content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
-    background:repeating-linear-gradient(0deg, rgba(0,255,65,.035) 0px, rgba(0,255,65,.035) 1px, transparent 1px, transparent 3px);
-  }
-
-  /* flatten the metallic sheen text to solid green with a phosphor glow */
-  [data-theme="tty"] .chrome,
-  [data-theme="tty"] .section-head h2 .chrome-txt,
-  [data-theme="tty"] .contact h2,
-  [data-theme="tty"] .car-title,
-  [data-theme="tty"] .car-title-below,
-  [data-theme="tty"] #modalContent h2{
-    background:none;-webkit-background-clip:initial;background-clip:initial;
-    color:#00ff41;-webkit-text-fill-color:#00ff41;animation:none;
-    text-shadow:0 0 8px rgba(0,255,65,.6);
-  }
-  [data-theme="tty"] .section-head h2 .chrome-txt::after{
-    content:"_";margin-left:6px;animation:ttyBlink 1s step-end infinite;
-  }
-  @keyframes ttyBlink{50%{opacity:0;}}
-
-  /* header: black bar, bracket-style nav links, "> " prompt on the brand */
-  [data-theme="tty"] header.nav{
-    background:#000;backdrop-filter:none;-webkit-backdrop-filter:none;
-    border-bottom:1px solid #00ff41;box-shadow:0 0 10px rgba(0,255,65,.25);
-  }
-  [data-theme="tty"] .brand span{
-    color:#00ff41;-webkit-text-fill-color:#00ff41;animation:none;background:none;
-    font-family:'IBM Plex Mono',monospace;text-shadow:0 0 6px rgba(0,255,65,.6);
-  }
-  [data-theme="tty"] .brand span::before{content:"> ";}
-  [data-theme="tty"] nav.links a{
-    color:#00aa33;font-family:'IBM Plex Mono',monospace;text-transform:lowercase;letter-spacing:0;
-  }
-  [data-theme="tty"] nav.links a::before{content:"[";}
-  [data-theme="tty"] nav.links a::after{content:"]";}
-  [data-theme="tty"] nav.links a.current,
-  [data-theme="tty"] nav.links a:hover, [data-theme="tty"] nav.links a:focus-visible{
-    color:#00ff41;text-shadow:0 0 6px rgba(0,255,65,.7);border-bottom-color:transparent;
-  }
-  [data-theme="tty"] .lang-toggle{border-color:#00ff41;border-radius:0;background:#000;}
-  [data-theme="tty"] .lang-btn{color:#00aa33;font-family:'IBM Plex Mono',monospace;}
-  [data-theme="tty"] .lang-btn.active{background:#00ff41;color:#000;}
-  [data-theme="tty"] .theme-btn{border-radius:0;border-color:#00ff41;background:#000;}
-  [data-theme="tty"] .theme-btn.active{box-shadow:inset 0 0 0 2px #00ff41;}
-
-  /* panels: flat black terminal windows, sharp corners, no blur */
-  [data-theme="tty"] .info-card, [data-theme="tty"] .car-tile, [data-theme="tty"] .modal-box{
-    backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
-    border-radius:2px;
-  }
-  [data-theme="tty"] .car-tile:hover::after{
-    background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,255,65,.18) 0%, transparent 32%);
-  }
-  [data-theme="tty"] .modal-close, [data-theme="tty"] .lightbox-close{
-    border-radius:2px;background:#000;border:1px solid #00ff41;color:#00ff41;
-    backdrop-filter:none;box-shadow:none;
-  }
-  [data-theme="tty"] .modal-close:hover, [data-theme="tty"] .lightbox-close:hover{
-    background:#00ff41;color:#000;box-shadow:none;
-  }
-
-  /* node "buttons": hollow terminal outline by default (via the variables
-     above), inverse-video (solid green, black glyph) on hover/focus
-     instead of the default theme's rotate + dark-fill hover */
-  [data-theme="tty"] .node:hover .node-shape, [data-theme="tty"] .node:focus-visible .node-shape,
-  [data-theme="tty"] .node-link:focus-visible .node-shape{
-    fill:#00ff41;stroke:#00ff41;transform:none;
-  }
-  [data-theme="tty"] .node-icon{transform:none !important;}
-  [data-theme="tty"] .node:hover .node-icon, [data-theme="tty"] .node:focus-visible .node-icon,
-  [data-theme="tty"] .node-link:focus-visible .node-icon{stroke:#000;}
-  [data-theme="tty"] .node:hover .node-icon .fill, [data-theme="tty"] .node:focus-visible .node-icon .fill,
-  [data-theme="tty"] .node-link:focus-visible .node-icon .fill{fill:#000;}
-  [data-theme="tty"] .node-text{font-family:'IBM Plex Mono',monospace;}
-  [data-theme="tty"] .dot-vis.active{filter:drop-shadow(0 0 6px rgba(0,255,65,.7));}
-
-  /* mini-player + the one hardcoded-white player label reachable outside
-     a modal: green terminal accents instead of glassy white */
-  [data-theme="tty"] .mini-player{
-    background:#000;border:1px solid #00ff41;box-shadow:0 0 10px rgba(0,255,65,.25);
-    backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:4px;
-  }
-  [data-theme="tty"] .mini-title{color:#00ff41;}
-  [data-theme="tty"] .mini-artist{color:#00aa33;}
-  [data-theme="tty"] .mini-btn{background:#000;border:1px solid #00ff41;color:#00ff41;border-radius:2px;}
-  [data-theme="tty"] .mini-btn:hover{background:#00ff41;color:#000;}
-  [data-theme="tty"] .mini-close{background:#000;border:1px solid #00aa33;color:#00aa33;border-radius:2px;}
-  [data-theme="tty"] .mini-close:hover{background:#00aa33;color:#000;}
-  [data-theme="tty"] .now-title{color:#00ff41;text-shadow:0 0 6px rgba(0,255,65,.5);}
 </style>
 
 <div class="grain" aria-hidden="true"></div>
@@ -1111,20 +612,6 @@
       <div class="lang-toggle" role="group" data-i18n-aria="lang.switcher.aria" aria-label="Язык">
         <button class="lang-btn active" data-lang="ru" type="button">RU</button>
         <button class="lang-btn" data-lang="en" type="button">EN</button>
-      </div>
-      <div class="theme-switch" role="group" data-i18n-aria="theme.switcher.aria" aria-label="Тема">
-        <button class="theme-btn active" data-theme="current" type="button" title="Current">
-          <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="2.6" fill="currentColor"/></svg>
-        </button>
-        <button class="theme-btn" data-theme="xp" type="button" title="Windows XP">
-          <svg viewBox="0 0 18 18"><rect x="1" y="1" width="7" height="7" fill="#f0413a"/><rect x="10" y="1" width="7" height="7" fill="#4caf3d"/><rect x="1" y="10" width="7" height="7" fill="#2f8ee0"/><rect x="10" y="10" width="7" height="7" fill="#ffc529"/></svg>
-        </button>
-        <button class="theme-btn" data-theme="minecraft" type="button" title="Minecraft">
-          <svg viewBox="0 0 18 18"><rect x="1" y="1" width="16" height="6" fill="#6bab3e"/><rect x="1" y="7" width="16" height="10" fill="#7a5230"/><rect x="3" y="9" width="3" height="3" fill="#5c3d24"/><rect x="10" y="12" width="3" height="3" fill="#5c3d24"/></svg>
-        </button>
-        <button class="theme-btn" data-theme="tty" type="button" title="TTY">
-          <svg viewBox="0 0 18 18"><rect x="1" y="1" width="16" height="16" fill="#0b0f0a"/><text x="3" y="12" font-family="monospace" font-size="8" fill="#38f26a">&gt;_</text></svg>
-        </button>
       </div>
     </div>
   </div>
@@ -1174,40 +661,6 @@
               <stop offset="0%" style="stop-color:var(--chrome-hi)"/>
               <stop offset="45%" style="stop-color:var(--chrome-mid)"/>
               <stop offset="100%" style="stop-color:var(--glow)"/>
-            </linearGradient>
-            <!-- Windows XP theme: silver beveled "button" gradients for the
-                 same node shapes, referenced only from [data-theme="xp"] CSS -->
-            <linearGradient id="nodeFillXP" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" style="stop-color:#ffffff"/>
-              <stop offset="45%" style="stop-color:#d8d4c8"/>
-              <stop offset="100%" style="stop-color:#a8a496"/>
-            </linearGradient>
-            <linearGradient id="nodeFillXPHover" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" style="stop-color:#a8a496"/>
-              <stop offset="55%" style="stop-color:#c9c5b8"/>
-              <stop offset="100%" style="stop-color:#e8e4d8"/>
-            </linearGradient>
-            <linearGradient id="nodeStrokeXP" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" style="stop-color:#ffffff"/>
-              <stop offset="100%" style="stop-color:#4a4840"/>
-            </linearGradient>
-            <!-- Minecraft theme: grass-block gradients for the node shapes,
-                 referenced only from [data-theme="minecraft"] CSS. Hover
-                 flips to the dirt-brown side, like turning the block over. -->
-            <linearGradient id="nodeFillMC" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" style="stop-color:#8ed653"/>
-              <stop offset="12%" style="stop-color:#7cc244"/>
-              <stop offset="55%" style="stop-color:#5a9c2f"/>
-              <stop offset="100%" style="stop-color:#4c8a26"/>
-            </linearGradient>
-            <linearGradient id="nodeFillMCHover" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" style="stop-color:#c69a5a"/>
-              <stop offset="45%" style="stop-color:#9c7748"/>
-              <stop offset="100%" style="stop-color:#7a5c36"/>
-            </linearGradient>
-            <linearGradient id="nodeStrokeMC" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" style="stop-color:#3a2a18"/>
-              <stop offset="100%" style="stop-color:#1c1408"/>
             </linearGradient>
           </defs>
           <path class="conn-glow" d="M90.0,230.0 C220.0,190.0 210.0,100.0 480.0,110.0 C750.0,120.0 623.3,263.3 900.0,260.0 C1176.7,256.7 1173.3,153.3 1310.0,100.0"/>
@@ -1531,7 +984,7 @@
     ru: {
       'nav.design':'Дизайн', 'nav.music':'Музыка', 'nav.video':'Видео',
       'nav.characters':'Персонажи', 'nav.connect':'Связь',
-      'lang.switcher.aria':'Язык', 'theme.switcher.aria':'Тема',
+      'lang.switcher.aria':'Язык',
       'intro.heading':'Обо мне',
       'intro.p1':'Меня зовут Илья — для творческих работ я Lamex. Мне 17, я из России, но горизонт вижу шире одной точки на карте.',
       'intro.p2':'Работаю мультитулом: персонажи, 3D, видео, дизайн, музыка, вайбкод-сайты (пример — данный сайт) — не держусь одного направления, а перехожу между ними по задаче. Профессионально работаю с ИИ: я раскладываю задачу на большие, подробные промпты и провожу результат через десятки итераций, а не останавливаюсь на первой генерации.',
@@ -1559,13 +1012,12 @@
       'modal.close.aria':'Закрыть', 'lightbox.close.aria':'Закрыть',
       'lightbox.hint':'колесо — зум · лкм — перетащить · двойной клик — сброс · esc — закрыть',
       'player.nothingPlaying':'Ничего не играет', 'player.chooseTrack':'Выберите трек',
-      'player.play.aria':'Воспроизвести', 'player.openPlayer.aria':'Открыть плеер', 'player.closePlayer.aria':'Закрыть плеер',
-      'theme.comingSoon':'Скоро'
+      'player.play.aria':'Воспроизвести', 'player.openPlayer.aria':'Открыть плеер', 'player.closePlayer.aria':'Закрыть плеер'
     },
     en: {
       'nav.design':'Design', 'nav.music':'Music', 'nav.video':'Video',
       'nav.characters':'Characters', 'nav.connect':'Contact',
-      'lang.switcher.aria':'Language', 'theme.switcher.aria':'Theme',
+      'lang.switcher.aria':'Language',
       'intro.heading':'About me',
       'intro.p1':"My name is Ilya — for creative work I go by Lamex. I'm 17, from Russia, but my horizons reach further than one point on the map.",
       'intro.p2':"I work as a multi-tool: characters, 3D, video, design, music, vibe-coded sites (this site being one example) — I don't stick to one direction, I switch between them depending on the task. I work with AI professionally: I break a task down into long, detailed prompts and run the result through dozens of iterations instead of settling for the first generation.",
@@ -1593,8 +1045,7 @@
       'modal.close.aria':'Close', 'lightbox.close.aria':'Close',
       'lightbox.hint':'wheel — zoom · lmb — drag · double-click — reset · esc — close',
       'player.nothingPlaying':'Nothing playing', 'player.chooseTrack':'Choose a track',
-      'player.play.aria':'Play', 'player.openPlayer.aria':'Open player', 'player.closePlayer.aria':'Close player',
-      'theme.comingSoon':'Coming soon'
+      'player.play.aria':'Play', 'player.openPlayer.aria':'Open player', 'player.closePlayer.aria':'Close player'
     }
   };
   let currentLang = localStorage.getItem('lamex-lang') === 'en' ? 'en' : 'ru';
@@ -2437,31 +1888,6 @@
       applyI18n();
     });
   });
-  // theme switching: "current" and "xp" are real, selectable themes; the
-  // remaining two are still stubs for themes to build later (Minecraft /
-  // TTY) and just flash a "coming soon" tooltip instead of doing anything
-  let currentTheme = localStorage.getItem('lamex-theme') || 'current';
-  function applyTheme(theme) {
-    currentTheme = theme;
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('lamex-theme', theme);
-    document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
-  }
-  document.querySelectorAll('.theme-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.classList.contains('theme-btn--stub')) {
-        btn.dataset.flash = t('theme.comingSoon');
-        btn.classList.remove('theme-btn--flash');
-        void btn.offsetWidth;
-        btn.classList.add('theme-btn--flash');
-        clearTimeout(btn._flashTimer);
-        btn._flashTimer = setTimeout(() => btn.classList.remove('theme-btn--flash'), 1500);
-        return;
-      }
-      applyTheme(btn.dataset.theme);
-    });
-  });
-  applyTheme(currentTheme);
   applyI18n();
 
   /* ---------- specular highlight tracking: kept only on the glass art-frame
