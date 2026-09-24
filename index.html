@@ -112,6 +112,18 @@
   }
   nav.links a.current{color:var(--chrome-hi);border-bottom-color:var(--glow);}
   nav.links a:hover, nav.links a:focus-visible{color:var(--text);border-bottom-color:var(--glow);}
+
+  /* on narrow screens the tabs don't fit on one line with the brand — let
+     them wrap onto their own row(s) instead of being cut off by the
+     horizontal-scroll behavior used on desktop; actual header height is
+     then measured and written back into --navh by JS since wrapped text
+     height varies with device font metrics */
+  @media (max-width:700px){
+    header.nav{height:auto;}
+    .nav-inner{flex-wrap:wrap;height:auto;padding:10px 16px;row-gap:8px;}
+    .brand{flex:0 0 100%;}
+    nav.links{flex:0 0 100%;overflow-x:visible;flex-wrap:wrap;gap:8px 18px;}
+  }
   /* ---------- PAGED FULLSCREEN STAGE ---------- */
   #stage{position:fixed;inset:0;}
   .screen{
@@ -170,6 +182,21 @@
     .intro-logo-col{order:-1;}
     .about-card{border-right:none;padding-right:0;}
     .fact-card{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:24px;}
+  }
+
+  /* the intro card stack (logo + about + facts) is taller than a phone
+     viewport and this site has no scroll fallback anywhere else, so only
+     here on mobile we let the screen itself scroll normally; reaching the
+     bottom and continuing to swipe/scroll is what advances to the next
+     section (handled in JS) instead of the usual single-gesture page-flip */
+  @media (max-width:700px){
+    #intro.screen{
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-y:contain;
+      justify-content:flex-start;
+      padding-bottom:48px;
+    }
   }
 
   /* ---------- SECTION HEADERS ---------- */
@@ -1558,6 +1585,23 @@
       curve: 'M140,230 C500,30 900,340 1260,110' },
     { viewBox: '0 0 350 260', pos: [[90,150],[250,110]],
       curve: 'M90,150 Q170,30 250,110' });
+
+  // on mobile the nav tabs wrap onto extra rows (see CSS), so the header's
+  // real height varies by device/font metrics — measure it instead of
+  // guessing, and feed it back into --navh so .screen's top padding still
+  // clears the header exactly
+  (function syncMobileNavHeight() {
+    const navEl = document.querySelector('header.nav');
+    const mqNav = window.matchMedia('(max-width:700px)');
+    function apply() {
+      if (mqNav.matches) document.documentElement.style.setProperty('--navh', navEl.offsetHeight + 'px');
+      else document.documentElement.style.removeProperty('--navh');
+    }
+    apply();
+    mqNav.addEventListener('change', apply);
+    window.addEventListener('resize', () => { if (mqNav.matches) apply(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+  })();
   // delegated (not per-element) so it also covers dot-nodes/modal carousels
   // built dynamically after this line runs
   document.addEventListener('keydown', (e) => {
@@ -1625,9 +1669,26 @@
     };
   }
 
+  // the intro card stack is taller than the viewport on phones (see CSS),
+  // so on mobile only it scrolls natively instead of page-flipping on the
+  // first gesture — reaching its bottom and continuing to scroll/swipe
+  // forward is what triggers the normal section transition
+  const mqMobileIntro = window.matchMedia('(max-width:700px)');
+  function introScrollGate(dir) {
+    if (!mqMobileIntro.matches || screens[current].id !== 'intro') return 'step';
+    const el = screens[current];
+    if (dir > 0) {
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+      return atBottom ? 'step' : 'native';
+    }
+    return el.scrollTop <= 0 ? 'step' : 'native';
+  }
+
   const stepWheel = withCooldown(110, (dir) => goTo(current + dir));
   window.addEventListener('wheel', (e) => {
     if (modalOpen || lightboxOpen) return;
+    const dir = e.deltaY > 0 ? 1 : -1;
+    if (Math.abs(e.deltaY) > 12 && introScrollGate(dir) === 'native') return;
     e.preventDefault();
     if (e.deltaY > 12) stepWheel(1);
     else if (e.deltaY < -12) stepWheel(-1);
@@ -1640,7 +1701,9 @@
     if (modalOpen || lightboxOpen) return;
     const dy = touchStartY - e.changedTouches[0].clientY;
     if (Math.abs(dy) < 40) return;
-    stepTouch(dy > 0 ? 1 : -1);
+    const dir = dy > 0 ? 1 : -1;
+    if (introScrollGate(dir) === 'native') return;
+    stepTouch(dir);
   }, { passive: true });
 
   const stepKey = withCooldown(110, (dir) => goTo(current + dir));
