@@ -184,18 +184,22 @@
     .fact-card{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:24px;}
   }
 
-  /* the intro card stack (logo + about + facts) is taller than a phone
-     viewport and this site has no scroll fallback anywhere else, so only
-     here on mobile we let the screen itself scroll normally; reaching the
+  /* some card stacks (esp. intro, and node-nav grids on small/zoomed
+     screens) can end up taller than the phone viewport, and this site has
+     no scroll fallback anywhere else — so on mobile every screen scrolls
+     normally instead of only flipping to the next section on the first
+     gesture. "safe center" keeps the existing vertical centering when
+     content fits, and only switches to top-alignment (so the top of the
+     content stays reachable by scrolling) once it doesn't. Reaching the
      bottom and continuing to swipe/scroll is what advances to the next
-     section (handled in JS) instead of the usual single-gesture page-flip */
+     section (handled in JS). */
   @media (max-width:700px){
-    #intro.screen{
+    .screen{
       overflow-y:auto;
       -webkit-overflow-scrolling:touch;
       overscroll-behavior-y:contain;
-      justify-content:flex-start;
-      padding-bottom:48px;
+      justify-content:safe center;
+      padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px) + 24px);
     }
   }
 
@@ -270,7 +274,7 @@
   .car-textpanel h3{font-size:1.2rem;margin-bottom:12px;font-weight:700;}
   .car-desc{font-size:0.92rem;color:var(--muted);margin:0;}
   .car-col{display:flex;flex-direction:column;align-items:center;gap:14px;}
-  .car-stage{position:relative;display:flex;justify-content:center;align-items:center;}
+  .car-stage{position:relative;display:flex;justify-content:center;align-items:center;touch-action:pan-y;}
   .car-tile{
     position:relative;display:flex;padding:12px;max-width:min(560px, 64vw);
     background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.015));
@@ -1121,6 +1125,25 @@
     prevBtn.addEventListener('click', () => { idx = (idx - 1 + items.length) % items.length; render(); });
     nextBtn.addEventListener('click', () => { idx = (idx + 1) % items.length; render(); });
 
+    // swipe left/right on the tile itself to move through the carousel —
+    // horizontal only (touch-action:pan-y on .car-stage leaves vertical
+    // page-scroll gestures alone), independent of the page-level vertical
+    // swipe-between-sections listener
+    let carTouchX = 0, carTouchY = 0;
+    stage.addEventListener('touchstart', (e) => {
+      if (items.length < 2) return;
+      carTouchX = e.touches[0].clientX;
+      carTouchY = e.touches[0].clientY;
+    }, { passive: true });
+    stage.addEventListener('touchend', (e) => {
+      if (items.length < 2) return;
+      const dx = e.changedTouches[0].clientX - carTouchX;
+      const dy = e.changedTouches[0].clientY - carTouchY;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+      idx = dx < 0 ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;
+      render();
+    }, { passive: true });
+
     if (moreBtn) {
       moreBtn.addEventListener('click', () => {
         const item = items[idx];
@@ -1589,7 +1612,10 @@
   // on mobile the nav tabs wrap onto extra rows (see CSS), so the header's
   // real height varies by device/font metrics — measure it instead of
   // guessing, and feed it back into --navh so .screen's top padding still
-  // clears the header exactly
+  // clears the header exactly. A ResizeObserver (rather than a one-off
+  // measurement) catches every cause of the header changing height: webfont
+  // swap-in, orientation change, dynamic text size — anything that could
+  // otherwise leave --navh stale and content overlapping the header.
   (function syncMobileNavHeight() {
     const navEl = document.querySelector('header.nav');
     const mqNav = window.matchMedia('(max-width:700px)');
@@ -1599,8 +1625,8 @@
     }
     apply();
     mqNav.addEventListener('change', apply);
-    window.addEventListener('resize', () => { if (mqNav.matches) apply(); });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+    if (window.ResizeObserver) new ResizeObserver(apply).observe(navEl);
+    else window.addEventListener('resize', () => { if (mqNav.matches) apply(); });
   })();
   // delegated (not per-element) so it also covers dot-nodes/modal carousels
   // built dynamically after this line runs
@@ -1669,13 +1695,16 @@
     };
   }
 
-  // the intro card stack is taller than the viewport on phones (see CSS),
-  // so on mobile only it scrolls natively instead of page-flipping on the
-  // first gesture — reaching its bottom and continuing to scroll/swipe
-  // forward is what triggers the normal section transition
+  // any screen's content can end up taller than the viewport on phones
+  // (see CSS) — on mobile it scrolls natively instead of page-flipping on
+  // the first gesture; reaching the bottom (or already being at the top,
+  // for the reverse direction) and continuing to scroll/swipe is what
+  // triggers the normal section transition. Screens that fit within the
+  // viewport have scrollTop always 0 and scrollHeight===clientHeight, so
+  // this is a no-op there and behaves exactly like before.
   const mqMobileIntro = window.matchMedia('(max-width:700px)');
   function introScrollGate(dir) {
-    if (!mqMobileIntro.matches || screens[current].id !== 'intro') return 'step';
+    if (!mqMobileIntro.matches) return 'step';
     const el = screens[current];
     if (dir > 0) {
       const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
