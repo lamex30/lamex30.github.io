@@ -174,6 +174,17 @@
   .section-head{margin-bottom:28px;text-align:center;}
   .section-head h2{font-size:1.7rem;display:inline-flex;align-items:baseline;gap:12px;font-weight:700;}
   .section-head h2 .num{font-family:'IBM Plex Mono',monospace;font-size:0.9rem;color:var(--muted);font-weight:400;}
+  .section-hint{margin:8px 0 0;color:var(--muted);font-size:0.85rem;}
+
+  /* ---------- SCROLL HINT: bouncing chevron hinting at wheel/swipe nav ---------- */
+  .scroll-hint{
+    position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+    color:var(--muted);opacity:.55;pointer-events:none;z-index:1;
+    animation:scrollHintBounce 2s ease-in-out infinite;
+  }
+  .scroll-hint svg{display:block;width:20px;height:20px;}
+  @keyframes scrollHintBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(7px);}}
+  @media (prefers-reduced-motion:reduce){.scroll-hint{animation:none;}}
 
   /* ---------- NODE NAV: scattered Material-Expressive nodes + curved line ---------- */
   .node-nav{margin:0 auto;padding:16px 0 8px;width:100%;}
@@ -580,7 +591,7 @@
   <!-- DESIGN MENU -->
   <section class="screen" id="design">
     <div class="wrap">
-      <div class="section-head reveal"><h2><span class="chrome-txt">Графический дизайн</span></h2></div>
+      <div class="section-head reveal"><h2><span class="chrome-txt">Графический дизайн</span></h2><p class="section-hint">Нажмите на иконку категории, чтобы посмотреть работы</p></div>
       <nav class="node-nav node-nav--design reveal">
         <svg viewBox="0 0 1400 420" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -646,7 +657,7 @@
   <!-- MUSIC MENU -->
   <section class="screen" id="music">
     <div class="wrap">
-      <div class="section-head reveal"><h2><span class="chrome-txt">Музыка</span></h2></div>
+      <div class="section-head reveal"><h2><span class="chrome-txt">Музыка</span></h2><p class="section-hint">Нажмите на иконку категории, чтобы посмотреть работы</p></div>
       <nav class="node-nav node-nav--music reveal">
         <svg viewBox="0 0 1400 340" xmlns="http://www.w3.org/2000/svg">
           <path class="conn-glow" d="M140,230 C500,30 900,340 1260,110"/>
@@ -1514,6 +1525,17 @@
 
   /* ---------- fullscreen pager ---------- */
   const screens = [...document.querySelectorAll('#stage > .screen')];
+
+  // small bouncing chevron on every screen but the last (Связь), hinting
+  // that wheel/swipe moves to the next section
+  screens.forEach(s => {
+    if (s.id === 'connect') return;
+    const hint = document.createElement('div');
+    hint.className = 'scroll-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    s.appendChild(hint);
+  });
   const navLinks = [...document.querySelectorAll('nav.links a')];
   const pagerEl = document.getElementById('pager');
   let current = 0;
