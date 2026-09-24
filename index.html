@@ -981,7 +981,7 @@
       if (loaded >= total) finish();
     }
     if (!total) { finish(); return; }
-    const safetyTimer = setTimeout(finish, 9000);
+    const safetyTimer = setTimeout(finish, 15000);
     list.forEach(src => {
       const img = new Image();
       img.onload = tick;
