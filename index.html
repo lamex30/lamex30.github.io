@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lamex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -268,10 +270,11 @@
   .car-video{background:#000;}
   .car-img{cursor:zoom-in;}
   .car-more{
-    position:absolute;left:8px;bottom:8px;z-index:5;
+    position:absolute;left:8px;bottom:8px;right:8px;z-index:5;
     background:rgba(9,9,11,.82);border:1px solid var(--chrome-mid);color:var(--text);
     font-family:'IBM Plex Mono',monospace;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.03em;
     padding:7px 11px;cursor:pointer;transition:border-color .2s, color .2s, box-shadow .2s, transform .15s ease;
+    width:max-content;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .car-more:hover{border-color:var(--glow);color:var(--chrome-hi);box-shadow:0 0 14px rgba(191,227,255,.3);}
   .car-more:active{transform:scale(.95);}
@@ -690,7 +693,7 @@
   <!-- 3D -->
   <section class="screen" id="3d">
     <div class="wrap">
-      <div class="section-head reveal"><h2><span class="chrome-txt">3D / Minecraft</span></h2></div>
+      <div class="section-head reveal"><h2><span class="chrome-txt">3D</span></h2></div>
       <div class="carousel solo reveal" data-carousel="3d">
         <div class="car-stage">
           <div class="particle-field">
@@ -996,7 +999,10 @@
     const h = vertical ? span : thickness;
     const pts = Array.from({ length: count }, (_, i) => {
       const along = pad + i * spacing;
-      const wiggle = thickness / 2 + Math.sin(i * 1.1) * (thickness / 2 - 3);
+      // one gentle hump across the whole row, however many dots there are —
+      // a per-dot fixed-frequency sine looked like a chaotic zigzag once a
+      // carousel had 10+ items
+      const wiggle = thickness / 2 + Math.sin((i / Math.max(count - 1, 1)) * Math.PI) * (thickness / 2 - 3);
       return vertical ? [wiggle, along] : [along, wiggle];
     });
     const svgNS = 'http://www.w3.org/2000/svg';
@@ -1513,6 +1519,45 @@
       });
     });
   });
+
+  // ---------- responsive node-nav: on narrow screens the wide scattered
+  // layout (built for full desktop width) shrinks to unreadable thumbnails,
+  // so re-lay the SAME node/icon/text elements out vertically instead of
+  // duplicating their markup for a second "mobile" copy ----------
+  function makeResponsiveNodeNav(navSelector, desktop, mobile) {
+    const svg = document.querySelector(navSelector + ' svg');
+    if (!svg) return;
+    const nodes = [...svg.querySelectorAll(':scope > .node')];
+    const connGlow = svg.querySelector('.conn-glow');
+    const connLine = svg.querySelector('.conn-line');
+    const mq = window.matchMedia('(max-width:700px)');
+    function apply(isMobile) {
+      const cfg = isMobile ? mobile : desktop;
+      svg.setAttribute('viewBox', cfg.viewBox);
+      nodes.forEach((n, i) => {
+        n.setAttribute('transform', `translate(${cfg.pos[i][0]},${cfg.pos[i][1]}) scale(1.3)`);
+      });
+      connGlow.setAttribute('d', cfg.curve);
+      connLine.setAttribute('d', cfg.curve);
+    }
+    apply(mq.matches);
+    mq.addEventListener('change', e => apply(e.matches));
+  }
+
+  // mobile configs stay short (2x2 grid / single wide row) rather than a
+  // tall vertical stack — the site has no scroll, so anything taller than
+  // the viewport would simply be unreachable on short phones
+  makeResponsiveNodeNav('.node-nav--design',
+    { viewBox: '0 0 1400 420', pos: [[90,230],[480,110],[900,260],[1310,100]],
+      curve: 'M90.0,230.0 C220.0,190.0 210.0,100.0 480.0,110.0 C750.0,120.0 623.3,263.3 900.0,260.0 C1176.7,256.7 1173.3,153.3 1310.0,100.0' },
+    { viewBox: '0 0 390 480', pos: [[95,100],[295,100],[295,350],[95,350]],
+      curve: 'M95.0,100.0 C161.7,100.0 228.3,16.7 295.0,100.0 C361.7,183.3 361.7,266.7 295.0,350.0 C228.3,433.3 161.7,350.0 95.0,350.0' });
+
+  makeResponsiveNodeNav('.node-nav--music',
+    { viewBox: '0 0 1400 340', pos: [[140,230],[1260,110]],
+      curve: 'M140,230 C500,30 900,340 1260,110' },
+    { viewBox: '0 0 350 260', pos: [[90,150],[250,110]],
+      curve: 'M90,150 Q170,30 250,110' });
   // delegated (not per-element) so it also covers dot-nodes/modal carousels
   // built dynamically after this line runs
   document.addEventListener('keydown', (e) => {
