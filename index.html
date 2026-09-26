@@ -264,14 +264,11 @@
   @keyframes connDash{to{stroke-dashoffset:-110;}}
   @media (prefers-reduced-motion:reduce){.conn-line{animation:none;}}
 
-  /* ---------- MINI NODE BUTTONS: same shape/icon language, small scale
-     (nav-contact, carousel arrows) — .node/.node-shape/.node-icon are
-     reused as-is, this just sizes the wrapping svg per context ---------- */
-  .node-mini{width:100%;height:100%;display:block;overflow:visible;}
-  .node-mini .node-shape{stroke-width:2.4px;}
-
   /* ---------- DOT CONSTELLATION: carousel position dots & the fullscreen
-     pager, restyled as tiny nodes threaded by the same animated curve ---------- */
+     pager, restyled as tiny nodes threaded by the same animated curve.
+     The active dot picks up --tile-color/--tile-glow when set (carousel
+     instances, per current item) and falls back to the default --glow
+     everywhere else (the fullscreen pager never sets those vars). ---------- */
   .dots-svg{display:block;overflow:visible;}
   .dot-node{cursor:pointer;outline:none;}
   .dot-hit{fill:transparent;}
@@ -280,7 +277,10 @@
     transition:fill .2s ease, stroke .2s ease, r .2s ease;
   }
   .dot-node:hover .dot-vis, .dot-node:focus-visible .dot-vis{stroke:var(--glow);}
-  .dot-vis.active{fill:var(--glow);filter:drop-shadow(0 0 6px rgba(191,227,255,.7));}
+  .dot-vis.active{
+    fill:var(--tile-color, var(--glow));
+    filter:drop-shadow(0 0 6px var(--tile-glow, rgba(191,227,255,.7)));
+  }
   .dots-line{stroke-width:1.2px;opacity:.75;stroke-dasharray:1 7;animation:connDash 2.2s linear infinite;}
 
   /* ---------- CAROUSEL (reused by main screens & modal) ---------- */
@@ -291,17 +291,38 @@
   .car-desc{font-size:0.92rem;color:var(--muted);margin:0;}
   .car-col{display:flex;flex-direction:column;align-items:center;gap:14px;}
   .car-stage{position:relative;display:flex;justify-content:center;align-items:center;touch-action:pan-y;}
-  .car-tile{
-    position:relative;display:flex;padding:12px;max-width:min(560px, 64vw);
-    background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.015));
-    backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
-    border:1.5px solid transparent;
-    border-image:linear-gradient(135deg, var(--chrome-hi), var(--chrome-mid) 45%, var(--glow)) 1;
-    box-shadow:0 30px 60px -28px rgba(0,0,0,.75);
+
+  /* ---------- AMBIENT FRAME: wraps every photo/video tile, everywhere on
+     the site (carousels AND category modals alike) — a big soft blob of
+     the image's own dominant color, plus a blurred/zoomed copy of the
+     same image peeking out around the edges, sitting behind the sharp
+     rounded tile. --tile-color/--tile-glow are set per-item from JS
+     (getDominantColor); until the first color resolves they fall back to
+     the site's default --glow so nothing ever renders uncolored. ---------- */
+  .car-frame{position:relative;display:flex;justify-content:center;align-items:center;perspective:1200px;}
+  .car-glow{
+    position:absolute;inset:-18%;z-index:0;pointer-events:none;
+    background:radial-gradient(closest-side, var(--tile-glow, rgba(191,227,255,.45)) 0%, transparent 72%);
+    filter:blur(46px);
+    transition:background .4s ease;
   }
-  .car-tile::before{
-    content:"";position:absolute;top:0;left:0;right:0;height:2px;z-index:2;opacity:.8;
-    background:linear-gradient(90deg, transparent, var(--glow), transparent);
+  .car-blur{
+    position:absolute;inset:-14%;z-index:0;pointer-events:none;
+    overflow:hidden;border-radius:34px;
+  }
+  .car-blur-img{
+    position:absolute;inset:-20%;width:140%;height:140%;object-fit:cover;
+    filter:blur(34px) saturate(1.35) brightness(.85);
+    opacity:.7;transition:opacity .3s ease;
+  }
+  @media (prefers-reduced-motion:reduce){.car-glow, .car-blur-img{transition:none;}}
+
+  .car-tile{
+    position:relative;z-index:1;display:flex;max-width:min(560px, 64vw);
+    border-radius:22px;overflow:hidden;
+    box-shadow:0 25px 60px -22px rgba(0,0,0,.7);
+    transition:transform .2s ease-out, box-shadow .2s ease;
+    will-change:transform;
   }
   .car-tile::after{
     content:"";position:absolute;inset:0;pointer-events:none;z-index:3;mix-blend-mode:overlay;opacity:0;
@@ -325,16 +346,22 @@
   }
   .car-more:hover{border-color:var(--glow);color:var(--chrome-hi);box-shadow:0 0 14px rgba(191,227,255,.3);}
   .car-more:active{transform:scale(.95);}
-  .car-controls{display:flex;justify-content:center;align-items:center;gap:30px;margin-top:16px;}
+
+  /* controls float free below the frame — no button "shape" behind the
+     arrows anymore, just a plain white glyph; the dots keep their existing
+     constellation look (styled above) but now tint to --tile-color too */
+  .car-controls{display:flex;justify-content:center;align-items:center;gap:34px;margin-top:18px;}
   .car-arrow{
-    position:static;width:44px;height:44px;
-    background:none;border:none;padding:0;color:var(--text);
+    position:static;width:40px;height:40px;
+    background:none;border:none;padding:0;color:#fff;
     display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:visible;
-    transition:transform .15s ease;
+    opacity:.8;transition:opacity .2s ease, transform .15s ease;
   }
-  .car-arrow:active{transform:scale(.88);}
+  .car-arrow svg{width:26px;height:26px;filter:drop-shadow(0 1px 4px rgba(0,0,0,.6));}
+  .car-arrow:hover{opacity:1;transform:scale(1.08);}
+  .car-arrow:active{transform:scale(.86);}
   .car-title-below{font-size:1.05rem;text-align:center;font-weight:600;}
-  .car-dots{display:flex;justify-content:center;margin-top:10px;}
+  .car-dots{display:flex;justify-content:center;margin-top:12px;}
 
   .particle-field{position:absolute;inset:-30px;pointer-events:none;z-index:0;}
   .particle{position:absolute;color:rgba(191,227,255,.55);opacity:0.55;animation:drift 8s ease-in-out infinite alternate;}
@@ -650,7 +677,7 @@
     <div class="wrap">
       <div class="section-head reveal"><h2><span class="chrome-txt" data-i18n="section.design.title">Графический дизайн</span></h2><p class="section-hint" data-i18n="section.hint">Нажмите на иконку категории, чтобы посмотреть работы</p></div>
       <nav class="node-nav node-nav--design reveal">
-        <svg viewBox="0 0 1400 420" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 1800 420" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="nodeFill" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" style="stop-color:#242830"/>
@@ -663,8 +690,8 @@
               <stop offset="100%" style="stop-color:var(--glow)"/>
             </linearGradient>
           </defs>
-          <path class="conn-glow" d="M90.0,230.0 C220.0,190.0 210.0,100.0 480.0,110.0 C750.0,120.0 623.3,263.3 900.0,260.0 C1176.7,256.7 1173.3,153.3 1310.0,100.0"/>
-          <path class="conn-line" d="M90.0,230.0 C220.0,190.0 210.0,100.0 480.0,110.0 C750.0,120.0 623.3,263.3 900.0,260.0 C1176.7,256.7 1173.3,153.3 1310.0,100.0"/>
+          <path class="conn-glow" d="M90.0,230.0 C155.0,210.0 345.0,105.0 480.0,110.0 C615.0,115.0 761.7,261.7 900.0,260.0 C1038.3,258.3 1175.0,106.7 1310.0,100.0 C1445.0,93.3 1643.3,200.0 1710.0,220.0"/>
+          <path class="conn-line" d="M90.0,230.0 C155.0,210.0 345.0,105.0 480.0,110.0 C615.0,115.0 761.7,261.7 900.0,260.0 C1038.3,258.3 1175.0,106.7 1310.0,100.0 C1445.0,93.3 1643.3,200.0 1710.0,220.0"/>
 
           <g class="node" transform="translate(90,230) scale(1.3)" tabindex="0" role="button" data-modal="designPreview" data-title="modal.title.designPreview">
             <path class="node-shape" d="M57.0,0.0 C57.0,2.1 56.2,4.3 55.2,6.2 C54.1,8.1 52.3,9.9 50.7,11.6 C49.1,13.2 47.1,14.5 45.7,16.0 C44.4,17.5 43.1,18.8 42.3,20.4 C41.6,22.0 41.3,23.8 41.0,25.8 C40.8,27.8 40.9,30.2 40.7,32.4 C40.4,34.7 40.1,37.2 39.3,39.3 C38.4,41.3 37.2,43.3 35.5,44.6 C33.9,45.9 31.7,46.6 29.5,47.0 C27.4,47.4 24.8,47.1 22.6,46.9 C20.3,46.6 18.0,45.9 16.0,45.7 C14.0,45.6 12.2,45.4 10.5,45.8 C8.7,46.2 7.2,47.1 5.4,48.2 C3.7,49.2 1.9,50.8 0.0,52.0 C-1.9,53.2 -4.1,54.6 -6.2,55.2 C-8.3,55.8 -10.7,56.0 -12.7,55.6 C-14.7,55.1 -16.7,53.9 -18.3,52.4 C-20.0,51.0 -21.3,48.7 -22.6,46.9 C-23.8,45.0 -24.7,42.7 -25.8,41.0 C-26.9,39.4 -27.9,37.9 -29.3,36.7 C-30.7,35.6 -32.4,35.0 -34.3,34.3 C-36.2,33.5 -38.5,33.2 -40.7,32.4 C-42.8,31.6 -45.2,30.8 -47.0,29.5 C-48.8,28.3 -50.5,26.6 -51.4,24.7 C-52.3,22.9 -52.5,20.5 -52.4,18.3 C-52.3,16.1 -51.4,13.7 -50.7,11.6 C-50.0,9.4 -48.8,7.4 -48.2,5.4 C-47.5,3.5 -47.0,1.8 -47.0,0.0 C-47.0,-1.8 -47.5,-3.5 -48.2,-5.4 C-48.8,-7.4 -50.0,-9.4 -50.7,-11.6 C-51.4,-13.7 -52.3,-16.1 -52.4,-18.3 C-52.5,-20.5 -52.3,-22.9 -51.4,-24.7 C-50.5,-26.6 -48.8,-28.3 -47.0,-29.5 C-45.2,-30.8 -42.8,-31.6 -40.7,-32.4 C-38.5,-33.2 -36.2,-33.5 -34.3,-34.3 C-32.4,-35.0 -30.7,-35.6 -29.3,-36.7 C-27.9,-37.9 -26.9,-39.4 -25.8,-41.0 C-24.7,-42.7 -23.8,-45.0 -22.6,-46.9 C-21.3,-48.7 -20.0,-51.0 -18.3,-52.4 C-16.7,-53.9 -14.7,-55.1 -12.7,-55.6 C-10.7,-56.0 -8.3,-55.8 -6.2,-55.2 C-4.1,-54.6 -1.9,-53.2 -0.0,-52.0 C1.9,-50.8 3.7,-49.2 5.4,-48.2 C7.2,-47.1 8.7,-46.2 10.5,-45.8 C12.2,-45.4 14.0,-45.6 16.0,-45.7 C18.0,-45.9 20.3,-46.6 22.6,-46.9 C24.8,-47.1 27.4,-47.4 29.5,-47.0 C31.7,-46.6 33.9,-45.9 35.5,-44.6 C37.2,-43.3 38.4,-41.3 39.3,-39.3 C40.1,-37.2 40.4,-34.7 40.7,-32.4 C40.9,-30.2 40.8,-27.8 41.0,-25.8 C41.3,-23.8 41.6,-22.0 42.3,-20.4 C43.1,-18.8 44.4,-17.5 45.7,-16.0 C47.1,-14.5 49.1,-13.2 50.7,-11.6 C52.3,-9.9 54.1,-8.1 55.2,-6.2 C56.2,-4.3 57.0,-2.1 57.0,0.0Z"/>
@@ -705,6 +732,17 @@
               <path d="M-9,6 L-2,-2 L3,4 L6,0 L9,6"/>
             </g>
             <text class="node-text" y="83" data-i18n="design.posters">Постеры</text>
+          </g>
+
+          <g class="node" transform="translate(1710,220) scale(1.3)" tabindex="0" role="button" data-modal="designCovers" data-title="modal.title.designCovers">
+            <path class="node-shape" d="M57.0,0.0 C57.0,2.1 56.2,4.3 55.2,6.2 C54.1,8.1 52.3,9.9 50.7,11.6 C49.1,13.2 47.1,14.5 45.7,16.0 C44.4,17.5 43.1,18.8 42.3,20.4 C41.6,22.0 41.3,23.8 41.0,25.8 C40.8,27.8 40.9,30.2 40.7,32.4 C40.4,34.7 40.1,37.2 39.3,39.3 C38.4,41.3 37.2,43.3 35.5,44.6 C33.9,45.9 31.7,46.6 29.5,47.0 C27.4,47.4 24.8,47.1 22.6,46.9 C20.3,46.6 18.0,45.9 16.0,45.7 C14.0,45.6 12.2,45.4 10.5,45.8 C8.7,46.2 7.2,47.1 5.4,48.2 C3.7,49.2 1.9,50.8 0.0,52.0 C-1.9,53.2 -4.1,54.6 -6.2,55.2 C-8.3,55.8 -10.7,56.0 -12.7,55.6 C-14.7,55.1 -16.7,53.9 -18.3,52.4 C-20.0,51.0 -21.3,48.7 -22.6,46.9 C-23.8,45.0 -24.7,42.7 -25.8,41.0 C-26.9,39.4 -27.9,37.9 -29.3,36.7 C-30.7,35.6 -32.4,35.0 -34.3,34.3 C-36.2,33.5 -38.5,33.2 -40.7,32.4 C-42.8,31.6 -45.2,30.8 -47.0,29.5 C-48.8,28.3 -50.5,26.6 -51.4,24.7 C-52.3,22.9 -52.5,20.5 -52.4,18.3 C-52.3,16.1 -51.4,13.7 -50.7,11.6 C-50.0,9.4 -48.8,7.4 -48.2,5.4 C-47.5,3.5 -47.0,1.8 -47.0,0.0 C-47.0,-1.8 -47.5,-3.5 -48.2,-5.4 C-48.8,-7.4 -50.0,-9.4 -50.7,-11.6 C-51.4,-13.7 -52.3,-16.1 -52.4,-18.3 C-52.5,-20.5 -52.3,-22.9 -51.4,-24.7 C-50.5,-26.6 -48.8,-28.3 -47.0,-29.5 C-45.2,-30.8 -42.8,-31.6 -40.7,-32.4 C-38.5,-33.2 -36.2,-33.5 -34.3,-34.3 C-32.4,-35.0 -30.7,-35.6 -29.3,-36.7 C-27.9,-37.9 -26.9,-39.4 -25.8,-41.0 C-24.7,-42.7 -23.8,-45.0 -22.6,-46.9 C-21.3,-48.7 -20.0,-51.0 -18.3,-52.4 C-16.7,-53.9 -14.7,-55.1 -12.7,-55.6 C-10.7,-56.0 -8.3,-55.8 -6.2,-55.2 C-4.1,-54.6 -1.9,-53.2 -0.0,-52.0 C1.9,-50.8 3.7,-49.2 5.4,-48.2 C7.2,-47.1 8.7,-46.2 10.5,-45.8 C12.2,-45.4 14.0,-45.6 16.0,-45.7 C18.0,-45.9 20.3,-46.6 22.6,-46.9 C24.8,-47.1 27.4,-47.4 29.5,-47.0 C31.7,-46.6 33.9,-45.9 35.5,-44.6 C37.2,-43.3 38.4,-41.3 39.3,-39.3 C40.1,-37.2 40.4,-34.7 40.7,-32.4 C40.9,-30.2 40.8,-27.8 41.0,-25.8 C41.3,-23.8 41.6,-22.0 42.3,-20.4 C43.1,-18.8 44.4,-17.5 45.7,-16.0 C47.1,-14.5 49.1,-13.2 50.7,-11.6 C52.3,-9.9 54.1,-8.1 55.2,-6.2 C56.2,-4.3 57.0,-2.1 57.0,0.0Z"/>
+            <g class="node-icon" style="--tilt:-8deg">
+              <rect x="-14" y="-14" width="28" height="28" rx="3"/>
+              <path d="M-3,10 L-3,-9 L10,-12 L10,7"/>
+              <circle class="fill" cx="-6" cy="10" r="3.4"/>
+              <circle class="fill" cx="7" cy="7" r="3.4"/>
+            </g>
+            <text class="node-text" y="83" data-i18n="design.covers">Обложки</text>
           </g>
         </svg>
       </nav>
@@ -754,7 +792,11 @@
             <span class="particle p1">✦</span><span class="particle p2">▚</span><span class="particle p3">✦</span>
             <span class="particle p4">▚</span><span class="particle p5">✦</span><span class="particle p6">▚</span>
           </div>
-          <div class="car-tile c-3d"><img class="car-img" alt=""></div>
+          <div class="car-frame">
+            <div class="car-glow" aria-hidden="true"></div>
+            <div class="car-blur" aria-hidden="true"><img class="car-blur-img" alt=""></div>
+            <div class="car-tile c-3d"><img class="car-img" alt=""></div>
+          </div>
         </div>
         <h3 class="car-title-below"></h3>
         <div class="car-controls">
@@ -772,7 +814,11 @@
       <div class="section-head reveal"><h2><span class="chrome-txt" data-i18n="section.video.title">Видео / моушн</span></h2></div>
       <div class="carousel solo reveal" data-carousel="video">
         <div class="car-stage">
-          <div class="car-tile"><video class="car-video" controls playsinline preload="metadata"></video></div>
+          <div class="car-frame">
+            <div class="car-glow" aria-hidden="true"></div>
+            <div class="car-blur" aria-hidden="true"><img class="car-blur-img" alt=""></div>
+            <div class="car-tile"><video class="car-video" controls playsinline preload="metadata"></video></div>
+          </div>
         </div>
         <h3 class="car-title-below"></h3>
         <div class="car-controls">
@@ -795,9 +841,13 @@
         </div>
         <div class="car-col">
           <div class="car-stage">
-            <div class="car-tile c-char">
-              <img class="car-img" alt="">
-              <button class="car-more" hidden data-i18n="carousel.more">ещё арты с этим персонажем</button>
+            <div class="car-frame">
+              <div class="car-glow" aria-hidden="true"></div>
+              <div class="car-blur" aria-hidden="true"><img class="car-blur-img" alt=""></div>
+              <div class="car-tile c-char">
+                <img class="car-img" alt="">
+                <button class="car-more" hidden data-i18n="carousel.more">ещё арты с этим персонажем</button>
+              </div>
             </div>
           </div>
           <div class="car-controls">
@@ -955,6 +1005,13 @@
       { name:"Benzin Bold", img:"assets/design/benzin-bold.webp" },
       { name:"Debian", img:"assets/design/debian.webp" }
     ],
+    designCovers: [
+      { name:"fall through the floor", img:"assets/design/covers/fall-through-the-floor.webp" },
+      { name:"no sleeppp!!!", img:"assets/design/covers/no-sleeppp.webp" },
+      { name:"Кусайся громче", nameEn:"Bite louder", img:"assets/design/covers/kusaysya-gromche.webp" },
+      { name:"Treme o chão", img:"assets/design/covers/treme-o-chao.webp" },
+      { name:"Desliza", img:"assets/design/covers/desliza.webp" }
+    ],
     musicSingles: [
       { name:"Рекламный трек Dzhaozi", nameEn:"Dzhaozi promo track", src:"assets/music/singles/dzhaozi.mp3" },
       { name:"fall through the floor", src:"assets/music/singles/fall-through-the-floor.mp3" },
@@ -996,11 +1053,12 @@
       'section.design.title':'Графический дизайн', 'section.music.title':'Музыка',
       'section.video.title':'Видео / моушн', 'section.characters.title':'Персонажи',
       'section.hint':'Нажмите на иконку категории, чтобы посмотреть работы',
-      'design.preview':'Превью', 'design.emotes':'Смайлики', 'design.infographic':'Инфографика', 'design.posters':'Постеры',
+      'design.preview':'Превью', 'design.emotes':'Смайлики', 'design.infographic':'Инфографика', 'design.posters':'Постеры', 'design.covers':'Обложки',
       'modal.title.designPreview':'Превью для стрим-канала',
       'modal.title.designEmotes':'Смайлики для Twitch/YouTube',
       'modal.title.designInfographic':'Инфографика',
       'modal.title.designPosters':'Постеры',
+      'modal.title.designCovers':'Обложки для треков',
       'music.singles':'Синглы', 'music.albums':'Альбомы',
       'carousel.prev':'Предыдущий', 'carousel.next':'Следующий', 'carousel.more':'ещё арты с этим персонажем',
       'a11y.slide':'Слайд',
@@ -1029,11 +1087,12 @@
       'section.design.title':'Graphic design', 'section.music.title':'Music',
       'section.video.title':'Video / motion', 'section.characters.title':'Characters',
       'section.hint':'Click a category icon to see the work',
-      'design.preview':'Preview', 'design.emotes':'Emotes', 'design.infographic':'Infographics', 'design.posters':'Posters',
+      'design.preview':'Preview', 'design.emotes':'Emotes', 'design.infographic':'Infographics', 'design.posters':'Posters', 'design.covers':'Covers',
       'modal.title.designPreview':'Stream channel previews',
       'modal.title.designEmotes':'Emotes for Twitch/YouTube',
       'modal.title.designInfographic':'Infographics',
       'modal.title.designPosters':'Posters',
+      'modal.title.designCovers':'Track covers',
       'music.singles':'Singles', 'music.albums':'Albums',
       'carousel.prev':'Previous', 'carousel.next':'Next', 'carousel.more':'more art of this character',
       'a11y.slide':'Slide',
@@ -1079,6 +1138,7 @@
     DATA.designEmotes.forEach(i => add(i.img));
     DATA.designInfographic.forEach(i => add(i.img));
     DATA.designPosters.forEach(i => add(i.img));
+    DATA.designCovers.forEach(i => add(i.img));
     add('assets/music/album/cover.webp');
     const list = [...urls];
 
@@ -1108,18 +1168,77 @@
 
   /* ---------- generic carousel (used by main screens + modal) ---------- */
 
-  const CLOVER4_PATH = 'M67.0,0.0 C67.0,1.9 66.1,3.9 65.0,5.7 C63.8,7.5 61.8,9.1 60.1,10.6 C58.4,12.1 56.2,13.3 54.8,14.7 C53.4,16.1 52.2,17.3 51.7,18.8 C51.1,20.4 51.2,22.0 51.4,24.0 C51.6,25.9 52.5,28.3 52.8,30.5 C53.2,32.7 53.7,35.3 53.4,37.4 C53.2,39.5 52.5,41.6 51.3,43.1 C50.1,44.5 48.2,45.5 46.1,46.1 C44.1,46.7 41.5,46.7 39.2,46.7 C36.9,46.8 34.5,46.3 32.6,46.5 C30.6,46.6 28.9,46.8 27.5,47.6 C26.1,48.5 25.1,49.8 24.0,51.4 C22.9,53.1 22.0,55.4 20.9,57.3 C19.7,59.3 18.4,61.6 16.9,63.0 C15.3,64.5 13.5,65.7 11.6,66.0 C9.8,66.3 7.6,65.8 5.7,65.0 C3.7,64.2 1.8,62.4 0.0,61.0 C-1.8,59.6 -3.4,57.7 -4.9,56.5 C-6.5,55.4 -7.9,54.5 -9.6,54.2 C-11.2,53.9 -12.8,54.3 -14.7,54.8 C-16.6,55.3 -18.7,56.6 -20.9,57.3 C-23.0,58.0 -25.5,59.0 -27.6,59.1 C-29.7,59.2 -31.9,59.0 -33.5,58.0 C-35.1,57.1 -36.5,55.3 -37.4,53.4 C-38.4,51.6 -38.8,48.9 -39.2,46.7 C-39.7,44.5 -39.6,42.0 -40.1,40.1 C-40.6,38.2 -41.1,36.6 -42.1,35.4 C-43.2,34.1 -44.7,33.4 -46.5,32.6 C-48.3,31.7 -50.7,31.3 -52.8,30.5 C-54.9,29.7 -57.4,28.8 -59.1,27.6 C-60.8,26.3 -62.3,24.7 -63.0,22.9 C-63.6,21.1 -63.5,18.9 -63.0,16.9 C-62.5,14.8 -61.2,12.6 -60.1,10.6 C-59.0,8.6 -57.4,6.7 -56.5,4.9 C-55.7,3.2 -55.0,1.6 -55.0,0.0 C-55.0,-1.6 -55.7,-3.2 -56.5,-4.9 C-57.4,-6.7 -59.0,-8.6 -60.1,-10.6 C-61.2,-12.6 -62.5,-14.8 -63.0,-16.9 C-63.5,-18.9 -63.6,-21.1 -63.0,-22.9 C-62.3,-24.7 -60.8,-26.3 -59.1,-27.6 C-57.4,-28.8 -54.9,-29.7 -52.8,-30.5 C-50.7,-31.3 -48.3,-31.7 -46.5,-32.6 C-44.7,-33.4 -43.2,-34.1 -42.1,-35.4 C-41.1,-36.6 -40.6,-38.2 -40.1,-40.1 C-39.6,-42.0 -39.7,-44.5 -39.2,-46.7 C-38.8,-48.9 -38.4,-51.6 -37.4,-53.4 C-36.5,-55.3 -35.1,-57.1 -33.5,-58.0 C-31.9,-59.0 -29.7,-59.2 -27.6,-59.1 C-25.5,-59.0 -23.0,-58.0 -20.9,-57.3 C-18.7,-56.6 -16.6,-55.3 -14.7,-54.8 C-12.8,-54.3 -11.2,-53.9 -9.6,-54.2 C-7.9,-54.5 -6.5,-55.4 -4.9,-56.5 C-3.4,-57.7 -1.8,-59.6 -0.0,-61.0 C1.8,-62.4 3.7,-64.2 5.7,-65.0 C7.6,-65.8 9.8,-66.3 11.6,-66.0 C13.5,-65.7 15.3,-64.5 16.9,-63.0 C18.4,-61.6 19.7,-59.3 20.9,-57.3 C22.0,-55.4 22.9,-53.1 24.0,-51.4 C25.1,-49.8 26.1,-48.5 27.5,-47.6 C28.9,-46.8 30.6,-46.6 32.6,-46.5 C34.5,-46.3 36.9,-46.8 39.2,-46.7 C41.5,-46.7 44.1,-46.7 46.1,-46.1 C48.2,-45.5 50.1,-44.5 51.3,-43.1 C52.5,-41.6 53.2,-39.5 53.4,-37.4 C53.7,-35.3 53.2,-32.7 52.8,-30.5 C52.5,-28.3 51.6,-25.9 51.4,-24.0 C51.2,-22.0 51.1,-20.4 51.7,-18.8 C52.2,-17.3 53.4,-16.1 54.8,-14.7 C56.2,-13.3 58.4,-12.1 60.1,-10.6 C61.8,-9.1 63.8,-7.5 65.0,-5.7 C66.1,-3.9 67.0,-1.9 67.0,0.0Z';
-
+  // plain white chevron, no button "shape" behind it
   function arrowSVG(dir) {
-    const chevron = dir === 'prev' ? 'M8,-18 L-8,0 L8,18' : 'M-8,-18 L8,0 L-8,18';
-    const tilt = dir === 'prev' ? '-6deg' : '6deg';
-    const revClass = dir === 'prev' ? ' node--rev' : '';
-    return `<svg class="node-mini" viewBox="-75 -75 150 150" aria-hidden="true">
-      <g class="node${revClass}">
-        <path class="node-shape" d="${CLOVER4_PATH}"/>
-        <g class="node-icon" style="--tilt:${tilt}"><path d="${chevron}"/></g>
-      </g>
-    </svg>`;
+    const d = dir === 'prev' ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6';
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  }
+
+  /* ---------- ambient tile color: samples a small canvas copy of the
+     current image (or a video's poster) to pull one representative color,
+     nudges it toward a punchier/mid-brightness tone so it reads well as a
+     glow, and caches by URL since the same cover/poster comes up again as
+     users flip back and forth through a carousel ---------- */
+  const dominantColorCache = new Map();
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0; const l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        default: h = (r - g) / d + 4;
+      }
+      h /= 6;
+    }
+    return [h, s, l];
+  }
+  function hslToRgb(h, s, l) {
+    if (s === 0) { const v = Math.round(l * 255); return [v, v, v]; }
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    return [Math.round(hue2rgb(p, q, h + 1 / 3) * 255), Math.round(hue2rgb(p, q, h) * 255), Math.round(hue2rgb(p, q, h - 1 / 3) * 255)];
+  }
+  function getDominantColor(src) {
+    if (!src) return Promise.resolve(null);
+    if (dominantColorCache.has(src)) return Promise.resolve(dominantColorCache.get(src));
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const size = 24;
+          const canvas = document.createElement('canvas');
+          canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, size, size);
+          const data = ctx.getImageData(0, 0, size, size).data;
+          let r = 0, g = 0, b = 0, n = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] < 100) continue;
+            r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+          }
+          if (!n) throw new Error('no opaque pixels');
+          const [h, s, l] = rgbToHsl(r / n, g / n, b / n);
+          const [pr, pg, pb] = hslToRgb(h, Math.min(1, s * 1.3 + 0.12), Math.max(0.3, Math.min(0.6, l)));
+          const result = { color: `rgb(${pr},${pg},${pb})`, glow: `rgba(${pr},${pg},${pb},.55)` };
+          dominantColorCache.set(src, result);
+          resolve(result);
+        } catch (e) { resolve(null); }
+      };
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
   }
 
   function catmullRomPath(pts) {
@@ -1185,9 +1304,16 @@
     return dots;
   }
 
+  // shared cap for the pseudo-3D tile tilt, whether it's driven by the
+  // mouse (setupCarousel's pointermove) or the phone's gyroscope
+  // (applyGyroTilt, wired up further down)
+  const TILT_MAX_DEG = 7;
+
   function setupCarousel(root, items, opts = {}) {
     const stage = root.querySelector('.car-stage');
-    const tile = stage.querySelector('.car-tile');
+    const frame = stage.querySelector('.car-frame');
+    const tile = frame ? frame.querySelector('.car-tile') : stage.querySelector('.car-tile');
+    const blurImgEl = frame ? frame.querySelector('.car-blur-img') : null;
     const imgEl = tile.querySelector('.car-img');
     const videoEl = tile.querySelector('.car-video');
     const moreBtn = root.querySelector('.car-more');
@@ -1209,17 +1335,61 @@
       if (dotsWrap) dotsWrap.style.display = 'none';
     }
 
+    // ambient color: same picture drives the blurred backdrop image and
+    // the --tile-color/--tile-glow vars (dots + accents read the latter)
+    let colorRequestId = 0;
+    function applyAmbient(src) {
+      if (blurImgEl) blurImgEl.src = src || '';
+      const myRequest = ++colorRequestId;
+      getDominantColor(src).then(result => {
+        if (myRequest !== colorRequestId) return;
+        if (result) {
+          root.style.setProperty('--tile-color', result.color);
+          root.style.setProperty('--tile-glow', result.glow);
+        } else {
+          root.style.removeProperty('--tile-color');
+          root.style.removeProperty('--tile-glow');
+        }
+      });
+    }
+
     function applyItem(item) {
       if (videoEl) {
         videoEl.pause();
         videoEl.setAttribute('poster', item.poster);
         videoEl.src = item.video;
         videoEl.load();
+        applyAmbient(item.poster);
       } else if (imgEl) {
         imgEl.src = item.img;
         imgEl.alt = L(item, 'name');
+        applyAmbient(item.img);
       }
     }
+
+    // subtle pseudo-3D tilt following the cursor (fine-pointer devices
+    // only — touch already drives the carousel via swipe) + the existing
+    // glass specular highlight; gyroscope tilt for phones is wired up
+    // globally near the other page-wide listeners, tagging every
+    // .car-tile it finds, this one included
+    const tiltFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)');
+    tile.addEventListener('pointermove', (e) => {
+      const r = tile.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      tile.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+      tile.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+      if (tiltFinePointer.matches) {
+        const rx = (0.5 - py) * TILT_MAX_DEG * 2;
+        const ry = (px - 0.5) * TILT_MAX_DEG * 2;
+        tile.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+      }
+    });
+    tile.addEventListener('pointerleave', () => {
+      tile.style.removeProperty('--mx');
+      tile.style.removeProperty('--my');
+      if (tiltFinePointer.matches) tile.style.transform = '';
+    });
 
     function render() {
       const item = items[idx];
@@ -1405,7 +1575,11 @@
       <div class="section-head" style="margin-bottom:20px;"><h2 style="font-size:1.3rem;">${title}</h2></div>
       <div class="carousel solo" id="modalCarouselRoot">
         <div class="car-stage">
-          <div class="car-tile"><img class="car-img" alt=""></div>
+          <div class="car-frame">
+            <div class="car-glow" aria-hidden="true"></div>
+            <div class="car-blur" aria-hidden="true"><img class="car-blur-img" alt=""></div>
+            <div class="car-tile"><img class="car-img" alt=""></div>
+          </div>
         </div>
         <div class="car-controls">
           <button class="car-arrow prev" aria-label="${t('carousel.prev')}"></button>
@@ -1714,14 +1888,14 @@
     mq.addEventListener('change', e => apply(e.matches));
   }
 
-  // mobile configs stay short (2x2 grid / single wide row) rather than a
-  // tall vertical stack — the site has no scroll, so anything taller than
-  // the viewport would simply be unreachable on short phones
+  // mobile configs stay compact (grid layouts) rather than a tall vertical
+  // stack — every screen can scroll if its content runs long, but a
+  // layout that already fits without scrolling is still the nicer result
   makeResponsiveNodeNav('.node-nav--design',
-    { viewBox: '0 0 1400 420', pos: [[90,230],[480,110],[900,260],[1310,100]],
-      curve: 'M90.0,230.0 C220.0,190.0 210.0,100.0 480.0,110.0 C750.0,120.0 623.3,263.3 900.0,260.0 C1176.7,256.7 1173.3,153.3 1310.0,100.0' },
-    { viewBox: '0 0 390 480', pos: [[95,100],[295,100],[295,350],[95,350]],
-      curve: 'M95.0,100.0 C161.7,100.0 228.3,16.7 295.0,100.0 C361.7,183.3 361.7,266.7 295.0,350.0 C228.3,433.3 161.7,350.0 95.0,350.0' });
+    { viewBox: '0 0 1800 420', pos: [[90,230],[480,110],[900,260],[1310,100],[1710,220]],
+      curve: 'M90.0,230.0 C155.0,210.0 345.0,105.0 480.0,110.0 C615.0,115.0 761.7,261.7 900.0,260.0 C1038.3,258.3 1175.0,106.7 1310.0,100.0 C1445.0,93.3 1643.3,200.0 1710.0,220.0' },
+    { viewBox: '0 0 580 580', pos: [[90,100],[290,100],[490,100],[390,430],[190,430]],
+      curve: 'M90.0,100.0 C123.3,100.0 223.3,100.0 290.0,100.0 C356.7,100.0 473.3,45.0 490.0,100.0 C506.7,155.0 440.0,375.0 390.0,430.0 C340.0,485.0 223.3,430.0 190.0,430.0' });
 
   makeResponsiveNodeNav('.node-nav--music',
     { viewBox: '0 0 1400 340', pos: [[140,230],[1260,110]],
@@ -1890,16 +2064,38 @@
   });
   applyI18n();
 
-  /* ---------- specular highlight tracking: kept only on the glass art-frame
-     tiles, where a moving light-catch reads as real material — the blob nav
-     is a flat outline now and just uses a plain hover state ---------- */
-  document.addEventListener('pointermove', (e) => {
-    const el = e.target.closest('.car-tile');
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
-    el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
-  });
+  /* ---------- gyroscope tilt for phones: the same pseudo-3D tilt every
+     .car-tile gets from the mouse on desktop, driven by device orientation
+     instead. iOS 13+ requires a permission prompt fired from a genuine
+     user gesture, so it's requested on the very first tap/click anywhere;
+     if that's denied, or the device simply has no motion sensor, tiles
+     just stay flat (transform never gets set) — exactly the "no gyro →
+     normal position" fallback. Desktops with a mouse use the per-tile
+     pointermove handler in setupCarousel instead, so this never fires
+     there (no deviceorientation events without a sensor). ---------- */
+  function applyGyroTilt(beta, gamma) {
+    if (beta == null || gamma == null) return;
+    const rx = Math.max(-TILT_MAX_DEG, Math.min(TILT_MAX_DEG, -(beta - 45) / 6));
+    const ry = Math.max(-TILT_MAX_DEG, Math.min(TILT_MAX_DEG, gamma / 6));
+    document.querySelectorAll('.car-tile').forEach(el => {
+      el.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+    });
+  }
+  (function initGyroTilt() {
+    if (typeof DeviceOrientationEvent === 'undefined') return;
+    const attach = () => window.addEventListener('deviceorientation', (e) => applyGyroTilt(e.beta, e.gamma));
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const grant = () => {
+        window.removeEventListener('touchend', grant);
+        window.removeEventListener('click', grant);
+        DeviceOrientationEvent.requestPermission().then(state => { if (state === 'granted') attach(); }).catch(() => {});
+      };
+      window.addEventListener('touchend', grant, { once: true });
+      window.addEventListener('click', grant, { once: true });
+    } else {
+      attach();
+    }
+  })();
 
   /* ---------- page-wide inverse parallax: content drifts a few px away
      from the cursor, header/pager drift a bit less (feels closer/steadier).
