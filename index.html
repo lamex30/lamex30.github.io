@@ -708,7 +708,15 @@ const BUILD = {
       return { pw, ph: (pw - 40) * v.h / v.w + 110, html:(x, y, rot, pw) => sheetHTML({ k, c:'video', cls:'vprint', x, y, r:rot, w:pw, inner: screen(v, i), label: v[lang] }) }; });
     const feed = feedSec('video', lang === 'ru' ? 'видео' : 'video', VIDEOS.map((v, i) =>
       `<figure class="print" style="--r:${((r()-.5)*4).toFixed(1)}deg"><span class="tape" aria-hidden="true"></span><div class="scr" style="padding-bottom:8px"><video controls playsinline preload="none" poster="${gal[i].poster}" src="${gal[i].video}" style="position:static;opacity:1;width:100%;height:auto"></video></div><div class="cap"><b>${esc(v[lang])}</b></div></figure>`).join(''));
-    return { html: layoutGroups([{ id:'video', title: lang === 'ru' ? 'видео' : 'video', meta:'motion · 3D', items }], r, 3.4), feed, first:'video' };
+    // a sticky note owning up to the compression: the site is light, the originals are not
+    const qn = lang === 'ru'
+      ? '<span class="big">о качестве</span>Здесь видео сжаты, чтобы сайт быстро грузился. Оригиналы делаю в отличном качестве.'
+      : '<span class="big">about quality</span>The videos here are compressed so the site loads fast. The originals are in full quality.';
+    let html = layoutGroups([{ id:'video', title: lang === 'ru' ? 'видео' : 'video', meta:'motion · 3D', items }], r, 3.4);
+    const c = clusters.video;
+    html += sheetHTML({ k: reg({ act:'none' }), cls:'note', x: c.x0 - 440, y: c.y0 + 100, r: -4, style:'width:380px;font-size:18px;', inner: qn.replace('class="big"', 'class="big" style="font-size:28px"') });
+    c.x0 -= 460; bounds.x0 -= 460;
+    return { html, feed: feed.replace('</h2>', `</h2><div class="print note" style="--r:-2deg">${qn}</div>`), first:'video' };
   },
   characters(r){
     let feed = '';
