@@ -690,6 +690,32 @@
     position:absolute;left:0;right:0;bottom:22px;text-align:center;
   }
 
+  /* ---------- DEV: project tiles that link out ---------- */
+  .dev-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;}
+  .dev-card{
+    position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;
+    width:min(340px,82vw);padding:22px 22px 20px;border-radius:22px;text-decoration:none;color:var(--text);
+    background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    transition:transform .5s cubic-bezier(.2,1.4,.4,1),border-color .3s ease,box-shadow .3s ease;
+    isolation:isolate;
+  }
+  .dev-glow{position:absolute;inset:-1px;border-radius:inherit;z-index:-1;opacity:0;transition:opacity .35s ease;
+    background:radial-gradient(60% 50% at 50% 38%,rgba(57,255,20,.20),transparent 70%),radial-gradient(70% 40% at 50% 100%,rgba(157,0,255,.22),transparent 75%);}
+  .dev-art{display:block;height:min(38vh,320px);aspect-ratio:1160/1280;max-width:100%;}
+  .dev-art img{width:100%;height:100%;object-fit:contain;display:block;transform-origin:50% 100%;
+    filter:drop-shadow(0 14px 18px rgba(0,0,0,.55));animation:devIdle 3.6s ease-in-out infinite;transition:transform .5s cubic-bezier(.2,1.6,.4,1);}
+  @keyframes devIdle{0%,100%{transform:none}50%{transform:translateY(-3%) rotate(-1.5deg)}}
+  .dev-meta{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+  .dev-name{font-family:'Unbounded',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:.04em;color:var(--chrome-hi);}
+  .dev-desc{font-size:.86rem;color:var(--muted);max-width:26ch;}
+  .dev-open{margin-top:6px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--chrome-mid);
+    border:1px solid var(--line);border-radius:20px;padding:7px 12px;transition:color .25s,border-color .25s,background .25s;}
+  .dev-card:hover,.dev-card:focus-visible{transform:translateY(-6px) rotate(-.6deg);border-color:rgba(57,255,20,.55);box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 1px rgba(57,255,20,.25);outline:none;}
+  .dev-card:hover .dev-glow,.dev-card:focus-visible .dev-glow{opacity:1;}
+  .dev-card:hover .dev-art img,.dev-card:focus-visible .dev-art img{animation:none;transform:translateY(-6%) scale(1.06,.95) rotate(-3deg);}
+  .dev-card:active .dev-art img{transform:scale(1.12,.84);transition-duration:.12s;}
+  .dev-card:hover .dev-open,.dev-card:focus-visible .dev-open{color:#0a0a0b;background:#39FF14;border-color:#39FF14;}
+  @media (prefers-reduced-motion:reduce){.dev-art img{animation:none;}.dev-card,.dev-art img{transition:none;}}
 </style>
 
 <div class="grain" aria-hidden="true"></div>
@@ -710,6 +736,7 @@
     </a>
     <nav class="links">
       <a data-goto="design" href="#design" data-i18n="nav.design">Дизайн</a>
+      <a data-goto="dev" href="#dev" data-i18n="nav.dev">Разработка</a>
       <a data-goto="music" href="#music" data-i18n="nav.music">Музыка</a>
       <a data-goto="3d" href="#3d">3D</a>
       <a data-goto="video" href="#video" data-i18n="nav.video">Видео</a>
@@ -828,6 +855,24 @@
           </g>
         </svg>
       </nav>
+    </div>
+  </section>
+
+  <!-- DEV -->
+  <section class="screen" id="dev">
+    <div class="wrap">
+      <div class="section-head reveal"><h2><span class="chrome-txt" data-i18n="section.dev.title">Разработка</span></h2><p class="section-hint" data-i18n="section.dev.hint">Сайты, которые я придумываю и собираю с нуля. Нажмите на проект, чтобы открыть</p></div>
+      <div class="dev-grid reveal">
+        <a class="dev-card" href="https://lamex30.github.io/mawrelle/" target="_blank" rel="noopener" data-i18n-aria="dev.mawrelle.aria" aria-label="Открыть сайт MAWRELLE в новой вкладке">
+          <span class="dev-glow" aria-hidden="true"></span>
+          <span class="dev-art"><img src="assets/dev/mawrelle.svg" alt="" width="1160" height="1280" loading="lazy" decoding="async"></span>
+          <span class="dev-meta">
+            <span class="dev-name">MAWRELLE</span>
+            <span class="dev-desc" data-i18n="dev.mawrelle.desc">Концепт-сайт выдуманного бренда плюшевых монстров</span>
+            <span class="dev-open mono"><span data-i18n="dev.open">Открыть сайт</span> <span aria-hidden="true">↗</span></span>
+          </span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -1164,7 +1209,9 @@
   const I18N = {
     ru: {
       'nav.design':'Дизайн', 'nav.music':'Музыка', 'nav.video':'Видео',
-      'nav.characters':'Персонажи', 'nav.skins':'Скины', 'nav.connect':'Связь',
+      'nav.characters':'Персонажи', 'nav.skins':'Скины', 'nav.connect':'Связь', 'nav.dev':'Разработка',
+      'section.dev.title':'Разработка', 'section.dev.hint':'Сайты, которые я придумываю и собираю с нуля. Нажмите на проект, чтобы открыть',
+      'dev.mawrelle.desc':'Концепт-сайт выдуманного бренда плюшевых монстров', 'dev.open':'Открыть сайт', 'dev.mawrelle.aria':'Открыть сайт MAWRELLE в новой вкладке',
       'section.skins.title':'Скины Minecraft', 'section.skins.hint':'Все скины рисую сам — от идеи до последнего пикселя',
       'lang.switcher.aria':'Язык',
       'intro.heading':'Обо мне',
@@ -1199,7 +1246,9 @@
     },
     en: {
       'nav.design':'Design', 'nav.music':'Music', 'nav.video':'Video',
-      'nav.characters':'Characters', 'nav.skins':'Skins', 'nav.connect':'Contact',
+      'nav.characters':'Characters', 'nav.skins':'Skins', 'nav.connect':'Contact', 'nav.dev':'DEV',
+      'section.dev.title':'Development', 'section.dev.hint':'Websites I dream up and build from scratch. Click a project to open it',
+      'dev.mawrelle.desc':'Concept site for a made-up brand of plush monsters', 'dev.open':'Open site', 'dev.mawrelle.aria':'Open the MAWRELLE site in a new tab',
       'section.skins.title':'Minecraft skins', 'section.skins.hint':'I draw every skin myself — from the idea to the last pixel',
       'lang.switcher.aria':'Language',
       'intro.heading':'About me',
