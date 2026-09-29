@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="LAMEX — портфолио: дизайн, вайбкод-сайты, музыка, 3D, видео, персонажи и скины.">
 <meta name="theme-color" content="#F2EDE3">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F2EDE3'/%3E%3Ctext x='8' y='50' font-family='monospace' font-weight='700' font-size='48' fill='%23141414'%3EL%3C/text%3E%3Ctext x='36' y='40' font-family='monospace' font-weight='700' font-size='40' fill='%23FF2A1A'%3E*%3C/text%3E%3C/svg%3E">
 <title>LAMEX</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=PT+Mono&family=Press+Start+2P&family=Rubik+Mono+One&family=Playfair+Display:ital,wght@1,900&family=Monoton&family=Bungee+Shade&display=swap">
@@ -86,7 +88,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .print img{display:block;width:100%;height:auto;pointer-events:none;background:var(--paper-2)}
 .print figcaption{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font:400 11px/1.2 var(--f-mono);color:var(--ink-2)}
 .print figcaption b{font:500 12px/1.2 var(--f-code);color:var(--ink)}
-.print .tape{position:absolute;top:-11px;left:50%;width:72px;height:22px;margin-left:-36px;background:var(--yellow);opacity:.82;transform:rotate(var(--tr,-4deg));
+.print .tape,.pre-sheet .tape{position:absolute;top:-11px;left:50%;width:72px;height:22px;margin-left:-36px;background:var(--yellow);opacity:.82;transform:rotate(var(--tr,-4deg));
   clip-path:polygon(3% 0,97% 4%,100% 50%,96% 100%,2% 96%,0 50%)}
 .print:hover{box-shadow:8px 8px 0 var(--sh);transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .4)) translateY(-4px) scale(1.015);z-index:5}
 .print.held{transition:box-shadow .2s;box-shadow:13px 13px 0 var(--sh);transform:translate(var(--x),var(--y)) rotate(calc(var(--r) * .2)) scale(1.05);z-index:10;cursor:grabbing}
@@ -168,6 +170,26 @@ button{font:inherit;color:inherit;cursor:pointer}
   .feed .print.in{animation:none}
   .stack{width:calc(100% - 32px);left:16px!important}
 }
+
+/* ============ PRELOADER: every asset is pulled in before the desk opens ============ */
+.pre{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;background:var(--paper);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.4px);background-size:28px 28px;-webkit-user-select:none;user-select:none;touch-action:none;transition:transform .8s cubic-bezier(.7,0,.2,1) .35s}
+.pre.done{transform:translateY(-105%)}
+.pre-in{width:min(560px,100%);display:flex;flex-direction:column;align-items:center;gap:26px}
+.pre-mark{height:clamp(80px,14vw,150px);display:flex;align-items:center;white-space:nowrap;line-height:1}
+.pre-mark span{display:inline-block;transition:transform .35s var(--spring)}
+.pre-mark .ast{color:var(--red)}
+.pre-sheet{position:relative;width:100%;padding:22px 22px 18px;background:var(--sheet);border:1px solid rgba(20,20,20,.12);box-shadow:6px 6px 0 var(--sh);transform:rotate(-1.5deg);animation:dropIn .9s var(--spring) backwards;--r:-1.5deg}
+.pre.done .pre-sheet{transition:transform .5s var(--spring);transform:rotate(4deg) scale(1.03)}
+.pre-top{display:flex;justify-content:space-between;margin-bottom:12px;font:500 12px/1 var(--f-code);color:var(--ink-2)}
+.pre-bar{position:relative;height:30px;border:2px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+.pre-bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--red) repeating-linear-gradient(-45deg,transparent 0 10px,rgba(255,214,10,.9) 10px 20px);background-size:28.28px 100%;border-right:2px solid var(--ink);transition:width .25s linear;animation:stripes .6s linear infinite}
+@keyframes stripes{to{background-position:28.28px 0}}
+.pre-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+.pre-row b{font:700 44px/1 var(--f-code);letter-spacing:-1px}
+.pre-row span{font:400 13px/1 var(--f-mono);color:var(--ink-2)}
+.pre-file{margin:10px 0 0;height:1.4em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:400 12px/1.4 var(--f-mono);color:var(--ink-2)}
+.pre-file.ok{color:var(--red);font-family:var(--f-code);font-weight:700}
+body.loading{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;transition-duration:.001ms!important}
 }
@@ -333,6 +355,19 @@ button{font:inherit;color:inherit;cursor:pointer}
 <div class="vol" id="vol"><button type="button" id="vMute" aria-label="Звук">🔊</button><input type="range" id="vRange" min="0" max="100" value="80" aria-label="Громкость"><span id="vPct">80%</span></div>
 <div class="toast" id="toast" role="status"></div>
 
+<div class="pre" id="pre" role="progressbar" aria-label="Загрузка" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="pre-in">
+    <div class="pre-mark" id="preMark" aria-hidden="true"></div>
+    <div class="pre-sheet">
+      <span class="tape" aria-hidden="true"></span>
+      <div class="pre-top"><span>~/lamex/assets</span><span id="preCount">000/000</span></div>
+      <div class="pre-bar"><i id="preFill"></i></div>
+      <div class="pre-row"><b id="prePct">0%</b><span id="preMb">0.0 / 0.0 MB</span></div>
+      <p class="pre-file" id="preFile">&gt; готовлю стол…</p>
+    </div>
+  </div>
+</div>
+
 <div class="lb" id="lb" hidden><figure><div id="lbMedia"></div><figcaption><span><b id="lbName"></b> <span id="lbSub"></span></span><span class="nav"><button class="x" type="button" id="lbPrev" aria-label="Назад">←</button><button class="x" type="button" id="lbNext" aria-label="Вперёд">→</button><button class="x" type="button" id="lbX">закрыть ✕</button></span></figcaption></figure></div>
 
 <script>
@@ -416,6 +451,9 @@ const ALBUMS = [
   { id:'album', ru:'no sleeppp!!!', en:'no sleeppp!!!', dir:'album', cover:'assets/music/album/cover.webp', kind:{ru:'альбом',en:'album'}, tracks:[['insomniakkk!!!','insomniakkk'],['dead dreamsss!!!','dead-dreamsss'],['no loveee!!!','no-loveee'],['city of the deaddd!!!','city-of-the-deaddd'],['fuck fameee!!!','fuck-fameee'],['rot in pissss!!!','rot-in-pissss']] },
   { id:'beats', ru:'Биты', en:'Beats', dir:'beats', art:'a-yel', tracks:[['despair','despair'],['derealization','derealization']] }
 ];
+const SIZES = {"assets/design/card-sneakers.webp":124550,"assets/design/card-screwdriver.webp":81508,"assets/design/debian.webp":306656,"assets/design/card-smartband.webp":90110,"assets/design/card-sky-toy.webp":80328,"assets/design/card-ushanka.webp":174784,"assets/design/benzin-bold.webp":236774,"assets/design/card-lego.webp":105986,"assets/design/posters/mansard.webp":29088,"assets/design/posters/kasse-poster.webp":506032,"assets/design/posters/rozygrysh.webp":74012,"assets/design/diverron/yagodny-farm.webp":228358,"assets/design/diverron/stroyka.webp":152152,"assets/design/diverron/scam.webp":124942,"assets/design/diverron/bespolezno.webp":206650,"assets/design/diverron/luchshiy-start.webp":119306,"assets/design/diverron/keysy-20k.webp":160408,"assets/design/diverron/karta-ofis.webp":128226,"assets/design/diverron/ccd-planet.webp":102982,"assets/design/diverron/muzhskoe-zhenskoe.webp":193294,"assets/design/diverron/metro-poezd.webp":158322,"assets/design/diverron/pshenic.webp":182802,"assets/design/emotes-static/cool.webp":51616,"assets/design/emotes-static/angry.webp":43044,"assets/design/emotes-static/w.webp":50384,"assets/design/emotes-static/heart.webp":53846,"assets/design/emotes-static/clown.webp":69070,"assets/design/covers/desliza.webp":396304,"assets/design/covers/kusaysya-gromche.webp":274820,"assets/design/covers/treme-o-chao.webp":659456,"assets/design/covers/fall-through-the-floor.webp":42412,"assets/design/covers/no-sleeppp.webp":152186,"assets/design/emotes/shock.webp":8104,"assets/design/emotes/popcorn.webp":12426,"assets/design/emotes/fun.webp":10600,"assets/design/emotes/condemn.webp":11360,"assets/design/emotes/music.webp":11874,"assets/characters/ashigawa.webp":87360,"assets/characters/grave.webp":70936,"assets/characters/ashwood.webp":78118,"assets/characters/true-lamex.webp":110872,"assets/characters/sable.webp":126384,"assets/characters/margarita.webp":120416,"assets/characters/extra/grave-fall.webp":141114,"assets/characters/extra/lamex-chrome.webp":437162,"assets/characters/extra/lamex-teeth.webp":184924,"assets/characters/extra/lamex-chrome-banner.webp":159796,"assets/characters/extra/lamex-l.webp":219880,"assets/dev/mawrelle.svg":408509,"assets/skins/skin-1.webp":17686,"assets/skins/skin-3.webp":31620,"assets/skins/skin-4.webp":26608,"assets/skins/skin-2.webp":24478,"assets/skins/tex-1.png":2242,"assets/skins/tex-2.png":4456,"assets/music/album/city-of-the-deaddd.mp3":3472445,"assets/music/album/insomniakkk.mp3":3362328,"assets/music/album/cover.webp":105316,"assets/music/album/rot-in-pissss.mp3":3452377,"assets/music/album/fuck-fameee.mp3":3241183,"assets/music/album/no-loveee.mp3":3471970,"assets/music/album/dead-dreamsss.mp3":3231754,"assets/music/beats/despair.mp3":2940959,"assets/music/beats/derealization.mp3":3166758,"assets/music/singles/quiet-room.mp3":2558358,"assets/music/singles/static.mp3":3743346,"assets/music/singles/nobody-cares.mp3":1511936,"assets/music/singles/fall-through-the-floor.mp3":1910869,"assets/music/singles/restless-warmth.mp3":1657338,"assets/music/singles/dzhaozi.mp3":1142883,"assets/music/singles/treme-o-chao.mp3":7440642,"assets/music/singles/mog-the-whole-room.mp3":1531774,"assets/3d/angel.webp":123342,"assets/3d/supermarket.webp":46658,"assets/3d/cigarette.webp":125812,"assets/video/day1.webp":42412,"assets/video/day2.webp":38078,"assets/video/day1.mp4":1277269,"assets/video/pulse.mp4":3510422,"assets/video/pulse.webp":42192,"assets/video/day2.mp4":1000806,"assets/video/teamtree.webp":33158,"assets/video/teamtree.mp4":4280965};
+const BLOB = {};
+const U = str => String(str).replace(/assets\/[\w\-\/\.]+/g, m => BLOB[m] || m);
 const TG = 'https://t.me/lamex30', SUNO = 'https://suno.com/@lamex30', MAIL = 'l4mex@protonmail.com', MAW = 'https://lamex30.github.io/mawrelle/';
 const nm = o => typeof o === 'string' ? o : o[lang];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -711,7 +749,7 @@ const BUILD = {
     const k = reg({ act:'link', url: MAW });
     const inner = `${imgTag('assets/dev/mawrelle.svg', 1160, 1300, 'MAWRELLE')}<div class="cap"><b>MAWRELLE<i>↗</i></b>${d[lang]}</div>`;
     let html = sheetHTML({ k, c:'dev', x:0, y:80, r:-3, w:400, inner, label:'MAWRELLE' });
-    html += sheetHTML({ k: reg({ act:'link', url: MAW }), cls:'note', x:450, y:170, r:5, inner:`<span class="big">vibe-coded</span>${lang === 'ru' ? 'Сайты с нуля в связке с ИИ: дизайн, анимации, интерактив.' : 'Sites from scratch, built together with AI: design, motion, interaction.'}<br><span class="go">${T[lang].open}</span>` });
+    html += sheetHTML({ k: reg({ act:'none' }), cls:'note', x:450, y:170, r:5, inner:`<span class="big">vibe-coded</span>${lang === 'ru' ? 'Сайты с нуля в связке с ИИ: дизайн, анимации, интерактив.' : 'Sites from scratch, built together with AI: design, motion, interaction.'}` });
     html += label(0, 0, -2, lang === 'ru' ? 'сайты' : 'sites', '');
     clusters.dev = { x0:-20, y0:-10, x1:780, y1:560 };
     bounds = { x0:-40, y0:-20, x1:800, y1:580 };
@@ -759,14 +797,14 @@ const BUILD = {
 };
 let firstCluster = null;
 function buildDesk(focus){
-  world.innerHTML = ''; REG = []; clusters = {}; delay = 0; openAlbums.clear();
+  world.innerHTML = ''; REG = []; clusters = {}; delay = 0; openAlbums.clear(); leaving.clear(); for(const k in albGen) albGen[k]++;
   document.body.classList.toggle('on-home', tab === 'home');
   setHint();
   if(tab === 'home'){ renderHome(); $('#feed').innerHTML = ''; return; }
   $('#about').hidden = true;
   const out = BUILD[tab](rnd(11 + tab.length));
-  world.innerHTML = out.html;
-  $('#feed').innerHTML = out.feed;
+  world.innerHTML = U(out.html);
+  $('#feed').innerHTML = U(out.feed);
   firstCluster = out.first;
   markPlaying();
   requestAnimationFrame(() => {
@@ -774,7 +812,7 @@ function buildDesk(focus){
     if(c) flyTo(c.x0 - 40, c.y0 - 40, c.x1 + 40, c.y1 + 40, 40);
     world.classList.remove('fly'); applyCam();
     if(focus) setTimeout(() => focusCluster(focus), 60);
-    if(tab === 'music') setTimeout(() => { const s = world.querySelector('.album'); if(s) toggleAlbum(s, 0); }, 900);
+    if(tab === 'music') setTimeout(() => { const s = world.querySelector('.album'); if(s && tab === 'music') toggleAlbum(s, 0, true); }, 900);
   });
 }
 function setHint(){ $('#hint').textContent = tab === 'music' ? T[lang].hintMusic : tab === 'skins' ? T[lang].hintSkins : T[lang].hint; }
@@ -815,6 +853,8 @@ addEventListener('pointermove', e => { if(fspin && e.pointerId === fspin.id){ sp
 
 /* ---------------- music: albums spill tracks on a thread ---------------- */
 const openAlbums = new Map(); // album index -> [track elements]
+const leaving = new Map();    // album index -> tracks flying back in
+const albGen = {};
 function toWorld(el){
   const m = new DOMMatrix(getComputedStyle(world).transform), dr = desk.getBoundingClientRect(), b = el.getBoundingClientRect();
   return { x: (b.left + b.width / 2 - dr.left - m.e) / m.a, y: (b.top + b.height / 2 - dr.top - m.f) / m.a };
@@ -822,7 +862,9 @@ function toWorld(el){
 function drawThreads(){
   const svg = $('#threads'); if(!svg) return;
   let d = '';
-  openAlbums.forEach((els, ai) => {
+  const both = new Map(openAlbums);
+  leaving.forEach((els, ai) => both.set(ai, (both.get(ai) || []).concat(els)));
+  both.forEach((els, ai) => {
     const al = world.querySelector(`.album[data-c="m-${ALBUMS[ai].id}"] .sleeve`); if(!al) return;
     const a = toWorld(al);
     els.forEach(el => {
@@ -839,18 +881,30 @@ function threadsFor(ms){
   if(thrOn) return; thrOn = true;
   (function loop(){ drawThreads(); if(performance.now() < thrUntil) requestAnimationFrame(loop); else thrOn = false; })();
 }
-function toggleAlbum(el, ai){
+function toggleAlbum(el, ai, want){
   const a = ALBUMS[ai];
-  el.classList.toggle('open');
-  if(openAlbums.has(ai)){
-    const els = openAlbums.get(ai);
-    const ax = parseFloat(el.style.getPropertyValue('--x')) + 20, ay = parseFloat(el.style.getPropertyValue('--y')) + 110;
-    els.forEach((t, j) => setTimeout(() => { t.style.setProperty('--x', ax + 'px'); t.style.setProperty('--y', ay + 'px'); t.classList.add('gone'); }, j * 30));
+  const isOpen = openAlbums.has(ai);
+  if(want !== undefined && want === isOpen) return;
+  // every click gets a new generation; timers from older clicks see the mismatch and do nothing
+  const gen = albGen[ai] = (albGen[ai] || 0) + 1;
+  const ax = parseFloat(el.style.getPropertyValue('--x')), ay = parseFloat(el.style.getPropertyValue('--y'));
+  if(isOpen){
+    el.classList.remove('open');
+    const els = openAlbums.get(ai); openAlbums.delete(ai);
+    const prev = leaving.get(ai) || []; leaving.set(ai, prev.concat(els));
+    els.forEach((t, j) => setTimeout(() => { t.style.setProperty('--x', (ax + 20) + 'px'); t.style.setProperty('--y', (ay + 110) + 'px'); t.classList.add('gone'); }, j * 30));
     threadsFor(1000);
-    setTimeout(() => { els.forEach(t => t.remove()); openAlbums.delete(ai); drawThreads(); }, 700 + els.length * 30);
+    setTimeout(() => {
+      els.forEach(t => t.remove());
+      const rest = (leaving.get(ai) || []).filter(t => !els.includes(t));
+      rest.length ? leaving.set(ai, rest) : leaving.delete(ai);
+      drawThreads();
+    }, 700 + els.length * 30);
     return;
   }
-  const ax = parseFloat(el.style.getPropertyValue('--x')), ay = parseFloat(el.style.getPropertyValue('--y'));
+  el.classList.add('open');
+  // anything still flying back into this sleeve is dropped at once so tracks never double up
+  (leaving.get(ai) || []).forEach(t => t.remove()); leaving.delete(ai);
   const r = rnd(97 + ai), frag = document.createDocumentFragment(), els = [];
   const cols = a.tracks.length > 4 ? 2 : 1;
   a.tracks.forEach((t, j) => {
@@ -861,11 +915,11 @@ function toggleAlbum(el, ai){
     f.style.cssText = `--x:${ax + 10}px;--y:${ay + 100}px;--r:${((r() - .5) * 30).toFixed(1)}deg`;
     frag.appendChild(f); els.push(f);
   });
-  const svg = $('#threads'); svg.after(frag);
+  $('#threads').after(frag);
   openAlbums.set(ai, els);
   void world.offsetWidth;
-  const rows = Math.ceil(a.tracks.length / cols);
   els.forEach((f, j) => setTimeout(() => {
+    if(albGen[ai] !== gen) return;
     const col = cols === 2 ? j % 2 : 0, row = cols === 2 ? (j / 2 | 0) : j;
     const tx = ax - 30 + col * 270 + (cols === 1 ? 20 : 0) + (r() - .5) * 50;
     const ty = ay + 330 + row * (cols === 1 ? 105 : 92) + (r() - .5) * 26;
@@ -883,7 +937,7 @@ function playTrack(ai, i){
   if(now && now.a === ai && now.i === i){ audio.paused ? audio.play() : audio.pause(); return; }
   const a = ALBUMS[ai], t = a.tracks[i];
   now = { a: ai, i };
-  audio.src = `assets/music/${a.dir}/${t[1]}.mp3`; audio.play().catch(() => {});
+  audio.src = U(`assets/music/${a.dir}/${t[1]}.mp3`); audio.play().catch(() => {});
   updPlayer(); player.classList.add('show'); $('#vol').classList.add('show');
 }
 function updPlayer(){
@@ -932,7 +986,7 @@ const ABOUT = {
 };
 function renderHome(){
   const a = ABOUT[lang], el = $('#about');
-  el.innerHTML = `
+  el.innerHTML = U(`
     <div class="about-text">
       <p class="about-path">~/lamex/about.md</p>
       <h1 class="about-hi" id="bigLogo" aria-label="LAMEX"></h1>
@@ -943,7 +997,7 @@ function renderHome(){
     <div class="about-desk">
       <figure class="print about-mascot"><span class="tape" aria-hidden="true"></span><img src="assets/characters/true-lamex.webp" alt="${a.mascot}" width="1680" height="945"><figcaption><b>true lamex</b><span>${a.mascot.split('—')[1].trim()}</span></figcaption></figure>
       <div class="print about-spec"><span class="tape" aria-hidden="true"></span><p class="spec-h">${a.spec}</p><dl>${a.facts.map(f => `<dt>${f[0]}</dt><dd>${f[1]}</dd>`).join('')}</dl></div>
-    </div>`;
+    </div>`);
   el.hidden = false;
   for(let i = marks.length - 1; i > 0; i--) if(!marks[i].el.isConnected) marks.splice(i, 1);
   addMark(el.querySelector('#bigLogo'), true);
@@ -956,7 +1010,7 @@ let lbGal = [], lbI = 0;
 function openLb(gal, i){ lbGal = gal; lbI = i; showLb(); lb.hidden = false; $('#lbX').focus(); }
 function showLb(){
   const g = lbGal[lbI], m = $('#lbMedia');
-  m.innerHTML = g.video ? `<video src="${g.video}" poster="${g.poster}" controls autoplay playsinline></video>` : `<img src="${g.src}" alt="${esc(g.name || '')}">`;
+  m.innerHTML = U(g.video ? `<video src="${g.video}" poster="${g.poster}" controls autoplay playsinline></video>` : `<img src="${g.src}" alt="${esc(g.name || '')}">`);
   $('#lbName').textContent = g.name || '';
   $('#lbSub').textContent = g.sub || '';
   const many = lbGal.length > 1;
@@ -982,7 +1036,92 @@ document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click'
   closeStack(); renderTabs(); buildDesk(); updPlayer();
 }));
 
-renderTabs(); buildDesk();
+/* ---------------- preloader: pull every asset in before the desk opens ---------------- */
+function assetList(){
+  const L = new Set(['assets/dev/mawrelle.svg', 'assets/characters/true-lamex.webp']);
+  Object.values(WORKS).forEach(list => list.forEach(w => L.add(D + w[0] + '.webp')));
+  R3D.forEach(w => L.add(`assets/3d/${w[0]}.webp`));
+  VIDEOS.forEach(v => { L.add(`assets/video/${v.f}.webp`); L.add(`assets/video/${v.f}.mp4`); });
+  CHARS.forEach(c => { L.add(`assets/characters/${c.f}.webp`); (c.extra || []).forEach(e => L.add(`assets/characters/extra/${e[0]}.webp`)); });
+  SKINS.forEach(t => L.add(t));
+  ALBUMS.forEach(a => { if(a.cover) L.add(a.cover); });
+  return [...L];
+}
+function preload(){
+  const pre = $('#pre'), fill = $('#preFill'), pct = $('#prePct'), mb = $('#preMb'), cnt = $('#preCount'), file = $('#preFile');
+  document.body.classList.add('loading');
+  addMark($('#preMark'), true);
+  // nothing on the page reacts while the loader is up: no keys, no wheel, no clicks through
+  const KEYS = /^(Tab|Enter| |Escape|Arrow\w+|PageUp|PageDown|Home|End)$/;
+  const block = e => { if(!pre.isConnected) return; if(e.type === 'keydown' && !KEYS.test(e.key)) return; e.preventDefault(); e.stopPropagation(); };
+  ['keydown','wheel','touchmove'].forEach(t => addEventListener(t, block, { capture:true, passive:false }));
+  const list = assetList();
+  const FONT_W = 400000; // the Google fonts count as a small slice of the bar
+  const total = list.reduce((n, p) => n + (SIZES[p] || 200000), 0) + FONT_W;
+  let got = 0, done = 0, shown = 0;
+  const pad = n => String(n).padStart(3, '0');
+  const draw = () => {
+    const p = Math.min(100, got / total * 100);
+    shown += (p - shown) * .25; if(p - shown < .1) shown = p;
+    fill.style.width = shown.toFixed(2) + '%'; pct.textContent = Math.floor(shown) + '%';
+    pre.setAttribute('aria-valuenow', Math.floor(shown));
+    mb.textContent = `${(got / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB`;
+    cnt.textContent = `${pad(done)}/${pad(list.length)}`;
+  };
+  let raf; (function tick(){ draw(); raf = requestAnimationFrame(tick); })();
+  async function one(p){
+    const expect = SIZES[p] || 200000; let seen = 0;
+    file.textContent = '> ' + p.replace('assets/', '');
+    try{
+      const res = await fetch(p);
+      if(!res.ok) throw 0;
+      const type = res.headers.get('content-type') || '';
+      let blob;
+      if(res.body && res.body.getReader){
+        const reader = res.body.getReader(), parts = [];
+        for(;;){ const { done: d, value } = await reader.read(); if(d) break; parts.push(value); const add = Math.min(value.length, Math.max(0, expect - seen)); seen += value.length; got += add; }
+        blob = new Blob(parts, { type });
+      } else blob = await res.blob();
+      BLOB[p] = URL.createObjectURL(blob);
+    }catch(e){ /* a missing file just keeps its normal URL */ }
+    got += Math.max(0, expect - seen); done++;
+  }
+  async function pool(n){
+    let i = 0;
+    await Promise.all(Array.from({ length: n }, async () => { while(i < list.length) await one(list[i++]); }));
+  }
+  const fonts = (async () => {
+    try{
+      await Promise.all(FONTS.map(f => document.fonts.load(`${f[4]} ${f[2]} 40px ${f[1]}`)).concat(
+        ['500 14px "Fira Code"','700 14px "Fira Code"','400 14px "PT Mono"'].map(f => document.fonts.load(f))));
+      await document.fonts.ready;
+    }catch(e){}
+    got += FONT_W;
+  })();
+  return Promise.all([pool(6), fonts]).then(async () => {
+    // decode the pictures now so the first pan across the desk never stutters
+    file.textContent = '> раскладываю распечатки…';
+    await Promise.all(list.filter(p => /\.(webp|png|svg)$/.test(p) && BLOB[p]).map(p => { const im = new Image(); im.src = BLOB[p]; return im.decode ? im.decode().catch(() => {}) : null; }));
+    got = total; draw();
+    await new Promise(r => setTimeout(r, 380));
+    cancelAnimationFrame(raf); fill.style.width = '100%'; pct.textContent = '100%';
+    file.textContent = '✓ всё на столе'; file.classList.add('ok');
+    await new Promise(r => setTimeout(r, 450));
+    renderTabs(); buildDesk();
+    pre.classList.add('done');
+    setTimeout(() => { pre.remove(); document.body.classList.remove('loading'); }, 1250);
+  });
+}
+/* tracks are heavy, so they follow in the background once the desk is open; until one lands it simply streams */
+function trackList(){ const L = []; ALBUMS.forEach(a => a.tracks.forEach(t => L.push(`assets/music/${a.dir}/${t[1]}.mp3`))); return L; }
+async function loadMusic(){
+  const list = trackList();
+  // the track that is playing (or the next one) jumps the queue
+  const next = () => { if(now){ const a = ALBUMS[now.a]; for(let j = now.i; j < a.tracks.length; j++){ const p = `assets/music/${a.dir}/${a.tracks[j][1]}.mp3`; const k = list.indexOf(p); if(k >= 0) return list.splice(k, 1)[0]; } } return list.shift(); };
+  const worker = async () => { for(let p; (p = next());){ try{ const r = await fetch(p); if(r.ok) BLOB[p] = URL.createObjectURL(await r.blob()); }catch(e){} } };
+  await Promise.all([worker(), worker()]);
+}
+preload().then(() => setTimeout(loadMusic, 1500));
 })();
 </script>
 
