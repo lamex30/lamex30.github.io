@@ -34,7 +34,7 @@
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.5 var(--f-mono);overflow:hidden}
-.head,.stack,.desk,.home,.hint,.player,.feed .stand{-webkit-user-select:none;user-select:none}
+.head,.stack,.desk,.home,.hint{-webkit-user-select:none;user-select:none}
 img{-webkit-user-drag:none;user-drag:none}
 button{font:inherit;color:inherit;cursor:pointer}
 ::selection{background:var(--yellow);color:var(--ink)}
@@ -227,84 +227,6 @@ body.loading{overflow:hidden}
 .scr.live .rec{opacity:1;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.2}}
 
-/* skins: little figurines on a base */
-.print.stand{padding:0;background:none;border:0;box-shadow:none;cursor:default;--p:10px}
-.print.stand:hover,.print.stand.held{box-shadow:none}
-.stand .stage{position:relative;width:calc(28 * var(--p));height:calc(44 * var(--p));perspective:1500px;cursor:ew-resize;touch-action:pan-y}
-.stand .fig{position:absolute;left:50%;top:calc(35 * var(--p));width:0;height:0;transform-style:preserve-3d;will-change:transform}
-.stand .fig *{transform-style:preserve-3d}
-.stand .pt,.stand .pv,.stand .cb{position:absolute;left:0;top:0;width:0;height:0}
-.stand .fc{position:absolute;left:0;top:0;display:block;background-image:var(--tex);background-size:calc(64 * var(--p)) calc(64 * var(--p));background-repeat:no-repeat;image-rendering:pixelated;backface-visibility:hidden}
-.stand .ov .fc{backface-visibility:visible}
-.stand .arm-r .pv{animation:swingA 3.2s ease-in-out infinite alternate}
-.stand .arm-l .pv{animation:swingA 3.2s ease-in-out infinite alternate-reverse}
-.stand .head .pv{animation:look 5s ease-in-out infinite alternate}
-@keyframes swingA{from{transform:rotateX(9deg) rotateZ(var(--az,0deg))}to{transform:rotateX(-9deg) rotateZ(var(--az,0deg))}}
-@keyframes look{0%,30%{transform:rotateY(-14deg)}70%,100%{transform:rotateY(12deg) rotateX(4deg)}}
-.stand .plate{position:absolute;left:calc(-12 * var(--p));top:calc(-12 * var(--p));width:calc(24 * var(--p));height:calc(24 * var(--p));border-radius:50%;background:#1a1a1a;cursor:grab}
-.stand .plate.top{background:var(--red);box-shadow:inset 0 0 0 3px var(--ink),inset 0 0 0 calc(2.2 * var(--p)) var(--red),inset 0 0 0 calc(2.2 * var(--p) + 2px) rgba(20,20,20,.35)}
-.stand .shadow{position:absolute;left:50%;top:calc(35.6 * var(--p));width:calc(27 * var(--p));height:calc(6 * var(--p));margin-left:calc(-13.5 * var(--p));border-radius:50%;background:var(--sh);filter:blur(1px);transform:translate(10px,calc(2 * var(--p)))}
-.stand .tag{display:block;margin:6px auto 0;width:max-content;background:var(--sheet);border:1.5px solid var(--ink);padding:4px 8px;font:500 11px/1 var(--f-code);box-shadow:3px 3px 0 var(--sh);cursor:grab}
-
-/* music: sleeves, tracks, threads */
-.threads{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none}
-.threads path{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:1 4.5}
-.threads path.on{stroke:var(--red);stroke-dasharray:none;stroke-width:2.2}
-.print.album{width:250px;padding:0;background:none;border:0;box-shadow:none;z-index:2}
-.print.album:hover,.print.album.held{box-shadow:none}
-.album .sleeve{position:relative;z-index:1;width:250px;height:250px;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--sh);overflow:hidden;background:var(--sheet)}
-.album .sleeve img{display:block;width:100%;height:100%;object-fit:cover;background:none}
-.album .disc{position:absolute;z-index:0;top:10px;left:10px;width:230px;height:230px;border-radius:50%;background:repeating-radial-gradient(circle,#1c1c1c 0 2px,#101010 2px 4px);border:2px solid var(--ink);transition:transform .7s var(--spring)}
-.album .disc::after{content:"";position:absolute;inset:36%;border-radius:50%;background:var(--red);border:6px solid #101010;box-shadow:0 0 0 30px transparent}
-.album:hover .disc{transform:translateX(34px) rotate(40deg)}
-.album.open .disc{transform:translateX(118px) rotate(180deg);animation:spin 3s linear .7s infinite}
-@keyframes spin{from{transform:translateX(118px) rotate(180deg)}to{transform:translateX(118px) rotate(540deg)}}
-.album .art{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:16px}
-.album .art b{font:700 40px/.95 var(--f-code);letter-spacing:-1.5px}
-.album .art b i{font-style:normal}
-.album .art span{font:500 12px/1.3 var(--f-code)}
-.album .art.a-ink{background:var(--ink);color:var(--paper)}
-.album .art.a-ink b i{color:var(--red)}
-.album .art.a-yel{background:var(--yellow);color:var(--ink);background-image:radial-gradient(rgba(20,20,20,.2) 1.2px,transparent 1.4px);background-size:12px 12px}
-.album .art.a-yel b i{color:var(--red)}
-.album .lbl{display:flex;justify-content:space-between;margin-top:12px;font:400 12px/1.2 var(--f-mono);color:var(--ink-2)}
-.album .lbl b{font:700 15px/1.2 var(--f-code);color:var(--ink)}
-.album .pull{position:absolute;z-index:3;left:12px;top:-14px;background:var(--yellow);border:2px solid var(--ink);padding:5px 8px;font:500 11px/1 var(--f-code);transform:rotate(-4deg);transition:transform .4s var(--spring)}
-.album:hover .pull{transform:rotate(-8deg) scale(1.08)}
-.print.track{width:230px;text-align:left;padding:9px 11px;display:flex;align-items:center;gap:10px;font:500 13px/1.2 var(--f-code);transition:box-shadow .25s var(--out),transform .95s var(--spring),opacity .4s}
-.print.track.gone{opacity:0}
-.track .pp{flex:0 0 30px;height:30px;display:grid;place-items:center;border:2px solid var(--ink);border-radius:50%;font-size:11px;background:var(--sheet)}
-.track .n{color:var(--red);font-size:11px}
-.track .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.track.playing{background:var(--ink);color:var(--paper)}
-.track.playing .pp{background:var(--red);border-color:var(--red);color:#fff}
-.eq{display:none;gap:2px;align-items:flex-end;height:14px}
-.eq i{width:3px;background:var(--yellow);animation:eq .8s ease-in-out infinite alternate}
-.eq i:nth-child(2){animation-delay:-.3s}.eq i:nth-child(3){animation-delay:-.55s}
-@keyframes eq{from{height:3px}to{height:14px}}
-.track.playing .eq{display:flex}
-.track.playing.paused .eq i{animation-play-state:paused}
-
-/* bottom player */
-.player{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:35;width:min(360px,calc(100% - 32px));display:grid;grid-template-columns:44px 1fr auto;gap:4px 12px;align-items:center;padding:10px 12px;background:var(--sheet);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);transform:translateY(calc(100% + 140px));transition:transform .55s var(--spring)}
-.player{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
-.player.show{transform:none}
-.vol{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:35;width:min(360px,calc(100% - 32px));display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--yellow);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);transform:translateY(calc(100% + 60px));transition:transform .55s var(--spring) .06s;-webkit-user-select:none;user-select:none}
-.vol.show{transform:none}
-.vol button{flex:0 0 auto;width:30px;height:30px;border:2px solid var(--ink);background:var(--sheet);font-size:13px;line-height:1;padding:0}
-.vol span{flex:0 0 38px;text-align:right;font:500 12px/1 var(--f-code)}
-.vol input{flex:1;-webkit-appearance:none;appearance:none;height:10px;border:2px solid var(--ink);background:linear-gradient(var(--ink),var(--ink)) 0/var(--v,80%) 100% no-repeat,var(--sheet);cursor:pointer;margin:0}
-.vol input::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:22px;background:var(--red);border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink)}
-.vol input::-moz-range-thumb{width:14px;height:20px;border-radius:0;background:var(--red);border:2px solid var(--ink)}
-.player .pbtn{width:44px;height:44px;grid-row:span 2;border:2px solid var(--ink);background:var(--red);color:#fff;font:700 14px/1 var(--f-code)}
-.player .pbtn:active{transform:translate(2px,2px)}
-.player .pt{min-width:0;font:700 13px/1.2 var(--f-code);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player .pt small{font:400 11px/1 var(--f-mono);color:var(--ink-2);margin-left:6px}
-.player .px{grid-row:span 2;border:0;background:none;font:500 14px/1 var(--f-code);padding:6px}
-.player .px:hover{color:var(--red)}
-.player .prog{position:relative;height:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font:400 10px/1 var(--f-mono);color:var(--ink-2)}
-.player .prog .rail{position:relative;flex:1;height:6px;border:1.5px solid var(--ink);background:var(--paper)}
-.player .prog .rail i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--yellow);border-right:1.5px solid var(--ink)}
 
 .toast{position:fixed;left:50%;top:calc(var(--headh) + 18px);z-index:70;transform:translate(-50%,-30px) rotate(-2deg);opacity:0;pointer-events:none;background:var(--yellow);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:10px 14px;font:700 14px/1 var(--f-code);transition:transform .45s var(--spring),opacity .2s}
 .toast.show{opacity:1;transform:translate(-50%,0) rotate(-2deg)}
@@ -314,13 +236,6 @@ body.loading{overflow:hidden}
 
 @media (max-width:720px){
   .feed .print.note{width:auto;margin-inline:8px}
-  .feed .print.album{width:auto;display:block}
-  .feed .album .sleeve{width:72%;height:auto;aspect-ratio:1}
-  .feed .album .disc{display:none}
-  .feed .tracklist{display:grid;gap:8px;margin:-6px 0 26px}
-  .feed .print.track{width:auto;margin:0}
-  .feed .print.stand{margin:10px auto 34px;width:max-content;--p:7px}
-  .player,.vol{right:16px;left:16px;width:auto}
 }
 </style>
 </head>
@@ -347,13 +262,6 @@ body.loading{overflow:hidden}
 <section class="about" id="about" hidden></section>
 <main class="feed" id="feed"></main>
 
-<div class="player" id="player" aria-live="polite">
-  <button class="pbtn" id="pBtn" type="button" aria-label="Пауза">❚❚</button>
-  <div class="pt" id="pTitle"></div>
-  <button class="px" id="pX" type="button" aria-label="Закрыть плеер">✕</button>
-  <div class="prog" id="pProg"><span class="rail"><i id="pBar"></i></span><span id="pTime">0:00</span></div>
-</div>
-<div class="vol" id="vol"><button type="button" id="vMute" aria-label="Звук">🔊</button><input type="range" id="vRange" min="0" max="100" value="80" aria-label="Громкость"><span id="vPct">80%</span></div>
 <div class="toast" id="toast" role="status"></div>
 
 <div class="pre" id="pre" role="progressbar" aria-label="Загрузка" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -376,10 +284,10 @@ body.loading{overflow:hidden}
 const $ = s => document.querySelector(s);
 let lang = 'ru';
 const T = {
-  ru:{ hint:'удерживай и тащи · колесо — масштаб · клик — открыть', hintMusic:'клик по альбому — треки выпадут · клик по треку — играть', hintSkins:'крути фигурку мышкой · двигай за подставку или бирку',
-       home:'↩ Вернуться к работам', close:'закрыть ✕', pcs:'шт.', tracks:'треков', pull:'клик — достать треки', copied:'Скопировано!', open:'открыть ↗', copy:'клик — скопировать' },
-  en:{ hint:'hold and drag · wheel to zoom · click to open', hintMusic:'click an album — tracks fall out · click a track to play', hintSkins:'spin a figure with the mouse · move it by the base',
-       home:'↩ Back to the work', close:'close ✕', pcs:'pcs', tracks:'tracks', pull:'click — pull the tracks', copied:'Copied!', open:'open ↗', copy:'click to copy' }
+  ru:{ hint:'удерживай и тащи · колесо — масштаб · клик — открыть',
+       home:'↩ Вернуться к работам', close:'закрыть ✕', pcs:'шт.', copied:'Скопировано!', open:'открыть ↗', copy:'клик — скопировать' },
+  en:{ hint:'hold and drag · wheel to zoom · click to open',
+       home:'↩ Back to the work', close:'close ✕', pcs:'pcs', copied:'Copied!', open:'open ↗', copy:'click to copy' }
 };
 const TABS = [
   { id:'home', ru:'Обо мне', en:'About' },
@@ -390,11 +298,9 @@ const TABS = [
     { id:'designCovers', ru:'обложки', en:'covers' },
     { id:'designEmotes', ru:'смайлики', en:'emotes' } ]},
   { id:'dev', ru:'Разработка', en:'DEV' },
-  { id:'music', ru:'Музыка', en:'Music' },
   { id:'3d', ru:'3D', en:'3D' },
   { id:'video', ru:'Видео', en:'Video' },
   { id:'characters', ru:'Персонажи', en:'Characters' },
-  { id:'skins', ru:'Скины', en:'Skins' },
   { id:'connect', ru:'Связь', en:'Contact' }
 ];
 const D = 'assets/design/';
@@ -407,6 +313,9 @@ const WORKS = {
 };
 const R3D = [['supermarket',1680,1260],['angel',1680,1680],['cigarette',1680,1680]];
 const VIDEOS = [
+  { ru:'Моушен-дизайн: мифы о Linux', en:'Motion design: Linux myths', f:'linux-myths', w:945, h:1680 },
+  { ru:'Кукольный театр «Lamex за Linux»', en:'Puppet theatre “Lamex on Linux”', f:'linux-theatre', w:945, h:1680 },
+  { ru:'3D-анимация скина Minecraft', en:'Minecraft skin 3D animation', f:'skin-day3', w:1344, h:1680 },
   { ru:'Проект для Pulse', en:'Project for Pulse', f:'pulse', w:1260, h:1680 },
   { ru:'Проект для TeamTree by TreePeople', en:'Project for TeamTree by TreePeople', f:'teamtree', w:1500, h:844 },
   { ru:'3D анимация для обзора персонажа', en:'3D animation for character showcase', f:'day1', w:1343, h:1680 },
@@ -425,41 +334,10 @@ const CHARS = [
   { name:'Sable', f:'sable', w:1499, h:1049, ...RANDOM },
   { name:'Маргарита', nameEn:'Margarita', f:'margarita', w:1680, h:946, ru:'Одна из самых долгих работ — на создание этого персонажа ушло 6 часов.', en:'One of the longest pieces to make — this character took 6 hours.' }
 ];
-const SKINS = ['assets/skins/tex-1.png','assets/skins/tex-2.png'];
-/* slim (3px arm) minecraft rig: [w,h,d, u,v (base), ou,ov (overlay), x, y-centre from feet, cls] */
-const RIG = [
-  [4,12,4, 0,16, 0,32, -2,6,'leg-r'], [4,12,4, 16,48, 0,48, 2,6,'leg-l'],
-  [8,12,4, 16,16, 16,32, 0,18,'body'],
-  [3,12,4, 40,16, 40,32, -5.5,18,'arm-r'], [3,12,4, 32,48, 48,48, 5.5,18,'arm-l'],
-  [8,8,8, 0,0, 32,0, 0,28,'head']
-];
-const P = n => `calc(${n} * var(--p))`;
-function cube(w, h, d, u, v){
-  const f = (fw, fh, bu, bv, tr) => `<i class="fc" style="width:${P(fw)};height:${P(fh)};margin:${P(-fh/2)} 0 0 ${P(-fw/2)};background-position:${P(-bu)} ${P(-bv)};transform:${tr}"></i>`;
-  return f(w, h, u+d, v+d, `translateZ(${P(d/2)})`) + f(w, h, u+2*d+w, v+d, `rotateY(180deg) translateZ(${P(d/2)})`)
-    + f(d, h, u, v+d, `rotateY(-90deg) translateZ(${P(w/2)})`) + f(d, h, u+d+w, v+d, `rotateY(90deg) translateZ(${P(w/2)})`)
-    + f(w, d, u+d, v, `rotateX(90deg) translateZ(${P(h/2)})`) + f(w, d, u+d+w, v, `rotateX(-90deg) translateZ(${P(h/2)})`);
-}
-function skinRig(tex){
-  const parts = RIG.map(([w,h,d,u,v,ou,ov,x,y,cls]) => {
-    // arms and legs pivot at their top edge, the head at its bottom
-    const oy = cls === 'head' ? h/2 : -h/2;
-    const az = cls === 'arm-r' ? 'rotateZ(3deg)' : cls === 'arm-l' ? 'rotateZ(-3deg)' : '';
-    return `<b class="pt ${cls}" style="transform:translate3d(${P(x)},${P(-y)},0)"><b class="pv" style="transform-origin:0 ${P(oy)};--az:${cls === 'arm-r' ? '3deg' : cls === 'arm-l' ? '-3deg' : '0deg'}"><b class="cb">${cube(w,h,d,u,v)}</b><b class="cb ov" style="transform:scale3d(${((w+1)/w).toFixed(4)},${((h+1)/h).toFixed(4)},${((d+1)/d).toFixed(4)})">${cube(w,h,d,ou,ov)}</b></b></b>`;
-  }).join('');
-  const plates = [0,1,2,3,4,5].map(i => `<i class="plate${i === 0 ? ' top' : ''}" style="transform:rotateX(90deg) translateZ(${-1 - i * 3}px)"></i>`).join('');
-  return `<div class="stage"><span class="shadow"></span><div class="fig" style="--tex:url('${tex}')">${plates}${parts}</div></div>`;
-}
-const ALBUMS = [
-  { id:'singles', ru:'Синглы', en:'Singles', dir:'singles', art:'a-ink', tracks:[['TREME O CHÃO','treme-o-chao'],['fall through the floor','fall-through-the-floor'],['restless warmth','restless-warmth'],['mog the whole room','mog-the-whole-room'],['nobody cares','nobody-cares'],['quiet room','quiet-room'],['STATIC','static'],[{ru:'Рекламный трек Dzhaozi',en:'Dzhaozi promo track'},'dzhaozi']] },
-  { id:'album', ru:'no sleeppp!!!', en:'no sleeppp!!!', dir:'album', cover:'assets/music/album/cover.webp', kind:{ru:'альбом',en:'album'}, tracks:[['insomniakkk!!!','insomniakkk'],['dead dreamsss!!!','dead-dreamsss'],['no loveee!!!','no-loveee'],['city of the deaddd!!!','city-of-the-deaddd'],['fuck fameee!!!','fuck-fameee'],['rot in pissss!!!','rot-in-pissss']] },
-  { id:'beats', ru:'Биты', en:'Beats', dir:'beats', art:'a-yel', tracks:[['despair','despair'],['derealization','derealization']] }
-];
-const SIZES = {"assets/design/posters/deti-cvety.webp":193988,"assets/design/posters/poster-leyn.webp":215552,"assets/design/previews/neyroset-polgoda.webp":152562,"assets/design/previews/buton-v-den.webp":156918,"assets/design/card-sneakers.webp":124550,"assets/design/card-screwdriver.webp":81508,"assets/design/debian.webp":306656,"assets/design/card-smartband.webp":90110,"assets/design/card-sky-toy.webp":80328,"assets/design/card-ushanka.webp":174784,"assets/design/benzin-bold.webp":236774,"assets/design/card-lego.webp":105986,"assets/design/posters/mansard.webp":29088,"assets/design/posters/kasse-poster.webp":506032,"assets/design/posters/rozygrysh.webp":74012,"assets/design/diverron/yagodny-farm.webp":228358,"assets/design/diverron/stroyka.webp":152152,"assets/design/diverron/scam.webp":124942,"assets/design/diverron/bespolezno.webp":206650,"assets/design/diverron/luchshiy-start.webp":119306,"assets/design/diverron/10-strategiy.webp":110552,"assets/design/diverron/keysy-20k.webp":160408,"assets/design/diverron/karta-ofis.webp":128226,"assets/design/diverron/ccd-planet.webp":102982,"assets/design/diverron/muzhskoe-zhenskoe.webp":193294,"assets/design/diverron/metro-poezd.webp":158322,"assets/design/diverron/pshenic.webp":182802,"assets/design/emotes-static/cool.webp":51616,"assets/design/emotes-static/angry.webp":43044,"assets/design/emotes-static/w.webp":50384,"assets/design/emotes-static/heart.webp":53846,"assets/design/emotes-static/clown.webp":69070,"assets/design/covers/desliza.webp":396304,"assets/design/covers/kusaysya-gromche.webp":274820,"assets/design/covers/treme-o-chao.webp":659456,"assets/design/covers/fall-through-the-floor.webp":42412,"assets/design/covers/no-sleeppp.webp":152186,"assets/design/emotes/shock.webp":8104,"assets/design/emotes/popcorn.webp":12426,"assets/design/emotes/fun.webp":10600,"assets/design/emotes/condemn.webp":11360,"assets/design/emotes/music.webp":11874,"assets/characters/ashigawa.webp":87360,"assets/characters/grave.webp":70936,"assets/characters/ashwood.webp":78118,"assets/characters/true-lamex.webp":110872,"assets/characters/sable.webp":126384,"assets/characters/margarita.webp":120416,"assets/characters/extra/grave-fall.webp":141114,"assets/characters/extra/lamex-chrome.webp":437162,"assets/characters/extra/lamex-teeth.webp":184924,"assets/characters/extra/lamex-chrome-banner.webp":159796,"assets/characters/extra/lamex-l.webp":219880,"assets/dev/mawrelle.svg":408509,"assets/dev/aura-drop.webp":36110,"assets/skins/skin-1.webp":17686,"assets/skins/skin-3.webp":31620,"assets/skins/skin-4.webp":26608,"assets/skins/skin-2.webp":24478,"assets/skins/tex-1.png":2242,"assets/skins/tex-2.png":4456,"assets/icons/icon-32.png":1254,"assets/icons/icon-180.png":8960,"assets/icons/icon-192.png":9603,"assets/icons/icon-512.png":16270,"assets/music/album/city-of-the-deaddd.mp3":3472445,"assets/music/album/insomniakkk.mp3":3362328,"assets/music/album/cover.webp":105316,"assets/music/album/rot-in-pissss.mp3":3452377,"assets/music/album/fuck-fameee.mp3":3241183,"assets/music/album/no-loveee.mp3":3471970,"assets/music/album/dead-dreamsss.mp3":3231754,"assets/music/beats/despair.mp3":2940959,"assets/music/beats/derealization.mp3":3166758,"assets/music/singles/quiet-room.mp3":2558358,"assets/music/singles/static.mp3":3743346,"assets/music/singles/nobody-cares.mp3":1511936,"assets/music/singles/fall-through-the-floor.mp3":1910869,"assets/music/singles/restless-warmth.mp3":1657338,"assets/music/singles/dzhaozi.mp3":1142883,"assets/music/singles/treme-o-chao.mp3":7440642,"assets/music/singles/mog-the-whole-room.mp3":1531774,"assets/3d/angel.webp":123342,"assets/3d/supermarket.webp":46658,"assets/3d/cigarette.webp":125812,"assets/video/day1.webp":42412,"assets/video/levan-token.webp":8676,"assets/video/day2.webp":38078,"assets/video/day1.mp4":1277269,"assets/video/pulse.mp4":3510422,"assets/video/vfx-edit.mp4":6255291,"assets/video/pulse.webp":42192,"assets/video/platform-review.webp":68914,"assets/video/day2.mp4":1000806,"assets/video/teamtree.webp":33158,"assets/video/vfx-edit.webp":31744,"assets/video/levan-token.mp4":3993454,"assets/video/teamtree.mp4":4280965,"assets/video/platform-review.mp4":3462067};
+const SIZES = {"assets/design/posters/deti-cvety.webp":193988,"assets/design/posters/poster-leyn.webp":215552,"assets/design/previews/neyroset-polgoda.webp":152562,"assets/design/previews/buton-v-den.webp":156918,"assets/design/card-sneakers.webp":124550,"assets/design/card-screwdriver.webp":81508,"assets/design/debian.webp":306656,"assets/design/card-smartband.webp":90110,"assets/design/card-sky-toy.webp":80328,"assets/design/card-ushanka.webp":174784,"assets/design/benzin-bold.webp":236774,"assets/design/card-lego.webp":105986,"assets/design/posters/mansard.webp":29088,"assets/design/posters/kasse-poster.webp":506032,"assets/design/posters/rozygrysh.webp":74012,"assets/design/diverron/yagodny-farm.webp":228358,"assets/design/diverron/stroyka.webp":152152,"assets/design/diverron/scam.webp":124942,"assets/design/diverron/bespolezno.webp":206650,"assets/design/diverron/luchshiy-start.webp":119306,"assets/design/diverron/10-strategiy.webp":110552,"assets/design/diverron/keysy-20k.webp":160408,"assets/design/diverron/karta-ofis.webp":128226,"assets/design/diverron/ccd-planet.webp":102982,"assets/design/diverron/muzhskoe-zhenskoe.webp":193294,"assets/design/diverron/metro-poezd.webp":158322,"assets/design/diverron/pshenic.webp":182802,"assets/design/emotes-static/cool.webp":51616,"assets/design/emotes-static/angry.webp":43044,"assets/design/emotes-static/w.webp":50384,"assets/design/emotes-static/heart.webp":53846,"assets/design/emotes-static/clown.webp":69070,"assets/design/covers/desliza.webp":396304,"assets/design/covers/kusaysya-gromche.webp":274820,"assets/design/covers/treme-o-chao.webp":659456,"assets/design/covers/fall-through-the-floor.webp":42412,"assets/design/covers/no-sleeppp.webp":152186,"assets/design/emotes/shock.webp":8104,"assets/design/emotes/popcorn.webp":12426,"assets/design/emotes/fun.webp":10600,"assets/design/emotes/condemn.webp":11360,"assets/design/emotes/music.webp":11874,"assets/characters/ashigawa.webp":87360,"assets/characters/grave.webp":70936,"assets/characters/ashwood.webp":78118,"assets/characters/true-lamex.webp":110872,"assets/characters/sable.webp":126384,"assets/characters/margarita.webp":120416,"assets/characters/extra/grave-fall.webp":141114,"assets/characters/extra/lamex-chrome.webp":437162,"assets/characters/extra/lamex-teeth.webp":184924,"assets/characters/extra/lamex-chrome-banner.webp":159796,"assets/characters/extra/lamex-l.webp":219880,"assets/dev/mawrelle.svg":408509,"assets/dev/aura-drop.webp":36110,"assets/icons/icon-32.png":1254,"assets/icons/icon-180.png":8960,"assets/icons/icon-192.png":9603,"assets/icons/icon-512.png":16270,"assets/3d/angel.webp":123342,"assets/3d/supermarket.webp":46658,"assets/3d/cigarette.webp":125812,"assets/video/day1.webp":42412,"assets/video/levan-token.webp":8676,"assets/video/day2.webp":38078,"assets/video/day1.mp4":1277269,"assets/video/pulse.mp4":3510422,"assets/video/vfx-edit.mp4":6255291,"assets/video/pulse.webp":42192,"assets/video/platform-review.webp":68914,"assets/video/day2.mp4":1000806,"assets/video/teamtree.webp":33158,"assets/video/vfx-edit.webp":31744,"assets/video/levan-token.mp4":3993454,"assets/video/teamtree.mp4":4280965,"assets/video/platform-review.mp4":3462067,"assets/video/linux-myths.mp4":8593974,"assets/video/linux-myths.webp":7424,"assets/video/linux-theatre.mp4":6791205,"assets/video/linux-theatre.webp":32418,"assets/video/skin-day3.mp4":788669,"assets/video/skin-day3.webp":13462};
 const BLOB = {};
 const U = str => String(str).replace(/assets\/[\w\-\/\.]+/g, m => BLOB[m] || m);
 const TG = 'https://t.me/lamex30', SUNO = 'https://suno.com/@lamex30', MAIL = 'l4mex@protonmail.com', MAW = 'https://lamex30.github.io/mawrelle/', AURA = 'https://lamex30.github.io/aura-drop/';
-const nm = o => typeof o === 'string' ? o : o[lang];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* ---------------- the shape-shifting wordmark ---------------- */
@@ -556,7 +434,7 @@ function flyTo(x0, y0, x1, y1, pad = 60){
   const w = desk.clientWidth, h = desk.clientHeight;
   const s = Math.min(1.1, Math.min((w - pad*2) / (x1 - x0), (h - pad*2) / (y1 - y0)));
   cam = { s, x: w/2 - (x0 + x1)/2 * s, y: h/2 - (y0 + y1)/2 * s };
-  world.classList.add('fly'); applyCam(); threadsFor(1000);
+  world.classList.add('fly'); applyCam();
   clearTimeout(flyTo.t); flyTo.t = setTimeout(() => world.classList.remove('fly'), 950);
 }
 function flyHome(){ const c = clusters[firstCluster]; if(c) flyTo(c.x0 - 40, c.y0 - 40, c.x1 + 40, c.y1 + 40, 40); else flyTo(bounds.x0, bounds.y0, bounds.x1, bounds.y1, 50); }
@@ -585,30 +463,25 @@ desk.addEventListener('pointerdown', e => {
   e.preventDefault();
   if(document.getSelection) document.getSelection().removeAllRanges();
   world.classList.remove('fly');
-  const fig = e.target.closest('.plate') ? null : e.target.closest('.fig');
-  if(fig){ drag = { id:e.pointerId, sx:e.clientX, sy:e.clientY, lx:e.clientX, moved:false, fig }; spinGrab(fig); desk.setPointerCapture(e.pointerId); return; }
   const p = e.target.closest('.print');
   drag = { id:e.pointerId, sx:e.clientX, sy:e.clientY, moved:false, print:p,
            ox: p ? parseFloat(p.style.getPropertyValue('--x')) : cam.x, oy: p ? parseFloat(p.style.getPropertyValue('--y')) : cam.y };
   desk.setPointerCapture(e.pointerId);
-  if(p){ p.classList.add('held'); if(!p.classList.contains('track')) p.parentNode.appendChild(p); } else desk.classList.add('dragging');
+  if(p){ p.classList.add('held'); p.parentNode.appendChild(p); } else desk.classList.add('dragging');
 });
 desk.addEventListener('pointermove', e => {
   if(!drag || e.pointerId !== drag.id) return;
   const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
   if(Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true;
-  if(drag.fig){ spinMove(drag.fig, e.clientX - drag.lx); drag.lx = e.clientX; return; }
-  if(drag.print){ drag.print.style.setProperty('--x', (drag.ox + dx / cam.s) + 'px'); drag.print.style.setProperty('--y', (drag.oy + dy / cam.s) + 'px'); threadsFor(500); }
+  if(drag.print){ drag.print.style.setProperty('--x', (drag.ox + dx / cam.s) + 'px'); drag.print.style.setProperty('--y', (drag.oy + dy / cam.s) + 'px'); }
   else { cam.x = drag.ox + dx; cam.y = drag.oy + dy; applyCam(); }
 });
 function endDrag(e){
   if(!drag || e.pointerId !== drag.id) return;
   const p = drag.print;
-  if(drag.fig) spinDrop(drag.fig);
   if(p){ p.classList.remove('held');
     if(!drag.moved) activate(p);
-    else if(!p.classList.contains('stand') && !p.classList.contains('album')) p.style.setProperty('--r', (Math.random()*10 - 5).toFixed(1) + 'deg');
-    threadsFor(600); }
+    else p.style.setProperty('--r', (Math.random()*10 - 5).toFixed(1) + 'deg'); }
   desk.classList.remove('dragging'); drag = null;
 }
 desk.addEventListener('pointerup', endDrag);
@@ -625,8 +498,6 @@ function activate(el){
   if(it.act === 'lb') openLb(it.gal, it.i);
   else if(it.act === 'link') window.open(it.url, '_blank', 'noopener');
   else if(it.act === 'copy') copyMail();
-  else if(it.act === 'album') toggleAlbum(el, it.a);
-  else if(it.act === 'track') playTrack(it.a, it.i);
 }
 
 /* ---------------- layout helpers ---------------- */
@@ -741,21 +612,6 @@ const BUILD = {
     const title = lang === 'ru' ? 'персонажи' : 'characters';
     return { html: layoutGroups([{ id:'chars', title, meta:`${CHARS.length} ${T[lang].pcs}`, items }], r, 2.1), feed: feedSec('chars', title, feed), first:'chars' };
   },
-  skins(r){
-    let html = '', feed = '';
-    SKINS.forEach((tex, i) => {
-      const x = i * 420 + (r() - .5) * 40, y = 40 + (r() - .5) * 50;
-      const inner = skinRig(tex) + `<span class="tag">skin_0${i + 1}.png</span>`;
-      html += sheetHTML({ k: reg({ act:'none' }), c:'skins', cls:'stand', x, y, r:0, tape:false, inner, label:`skin ${i + 1}` });
-      feed += `<figure class="print stand" style="--r:0deg">${inner}</figure>`;
-    });
-    const note = { ru:'Все скины рисую сам — от идеи до последнего пикселя', en:'I draw every skin myself — from the idea to the last pixel' };
-    html += label(-10, -40, -2, lang === 'ru' ? 'скины minecraft' : 'minecraft skins', '');
-    html += sheetHTML({ k: reg({ act:'none' }), cls:'note', x: 880, y: 60, r: 4, inner:`<span class="big">${lang === 'ru' ? 'пиксель к пикселю' : 'pixel by pixel'}</span>${note[lang]}` });
-    clusters.skins = { x0:-20, y0:-50, x1:1200, y1:470 };
-    bounds = { x0:-40, y0:-60, x1:1220, y1:490 };
-    return { html, feed: feedSec('skins', lang === 'ru' ? 'скины' : 'skins', `<p class="about-p" style="font-size:14px">${note[lang]}</p>${feed}`), first:'skins' };
-  },
   dev(r){
     const d = { ru:'Концепт-сайт выдуманного бренда плюшевых монстров', en:'Concept site for a made-up brand of plush monsters' };
     const k = reg({ act:'link', url: MAW });
@@ -786,35 +642,11 @@ const BUILD = {
     clusters.connect = { x0:-20, y0:-10, x1:820, y1:600 };
     bounds = { x0:-40, y0:-20, x1:840, y1:620 };
     return { html, feed: feedSec('connect', L ? 'связь' : 'contact', feed), first:'connect' };
-  },
-  music(r){
-    const L = lang === 'ru';
-    let html = '<svg class="threads" id="threads" aria-hidden="true"></svg>', feed = '';
-    ALBUMS.forEach((a, i) => {
-      const x = i * 760, y = 90 + (i % 2) * 40;
-      const k = reg({ act:'album', a: i });
-      const title = a[lang], kind = a.kind ? a.kind[lang] : (L ? 'сборник' : 'collection');
-      const art = a.cover ? `<img src="${a.cover}" alt="${esc(title)}" draggable="false">`
-        : `<div class="art ${a.art}"><b>${esc(title)}<i>*</i></b><span>LAMEX · ${a.tracks.length} ${T[lang].tracks}</span></div>`;
-      const inner = `<span class="pull">${T[lang].pull}</span><span class="disc" aria-hidden="true"></span><div class="sleeve">${art}</div><div class="lbl"><b>${esc(title)}</b><span>${kind} · ${a.tracks.length}</span></div>`;
-      html += sheetHTML({ k, c:'m-' + a.id, cls:'album', x, y, r: +((r() - .5) * 8).toFixed(1), tape:false, inner, label: title });
-      clusters['m-' + a.id] = { x0:x - 60, y0:y - 40, x1:x + 560, y1:y + 720 };
-      feed += `<section id="feed-m-${a.id}"><h2>/${esc(title)}<i>*</i></h2><figure class="print album" style="--r:0deg"><div class="sleeve">${art}</div></figure><div class="tracklist">${a.tracks.map((t, j) =>
-        `<button type="button" class="print track" data-k="${reg({ act:'track', a:i, i:j })}" data-a="${i}" data-t="${j}" style="--r:0deg"><span class="pp">▶</span><span class="n">${String(j + 1).padStart(2,'0')}</span><span class="t">${esc(nm(t[0]))}</span><span class="eq"><i></i><i></i><i></i></span></button>`).join('')}</div></section>`;
-    });
-    const beatsNote = L ? 'Делаю биты на заказ под твой стиль и задачу — пиши в Telegram' : 'I make custom beats for your style and task — message me on Telegram';
-    html += sheetHTML({ k: reg({ act:'link', url: TG }), cls:'note', x: 2 * 760 + 330, y: -60, r: 4, inner:`<span class="big">${L ? 'биты на заказ' : 'custom beats'}</span>${beatsNote}<br><span class="go">Telegram ↗</span>` });
-    html += sheetHTML({ k: reg({ act:'link', url: SUNO }), cls:'note ink', x: 330, y: -80, r: -3, w: 250, inner:`<span class="big">Suno</span>${L ? 'все треки в одном месте' : 'every track in one place'}<br><span class="go">${T[lang].open}</span>` });
-    html += label(0, -40, -2, L ? 'музыка' : 'music', `${ALBUMS.reduce((n, a) => n + a.tracks.length, 0)} ${T[lang].tracks}`);
-    clusters.music = { x0:-40, y0:-120, x1:2 * 760 + 660, y1:820 };
-    bounds = { x0:-60, y0:-140, x1:2 * 760 + 700, y1:900 };
-    feed += `<div class="print note" data-k="${reg({ act:'link', url: TG })}" style="--r:-2deg"><span class="big">${L ? 'биты на заказ' : 'custom beats'}</span>${beatsNote}<br><span class="go">Telegram ↗</span></div>`;
-    return { html, feed, first:'music' };
   }
 };
 let firstCluster = null;
 function buildDesk(focus){
-  world.innerHTML = ''; REG = []; clusters = {}; delay = 0; openAlbums.clear(); leaving.clear(); for(const k in albGen) albGen[k]++;
+  world.innerHTML = ''; REG = []; clusters = {}; delay = 0;
   document.body.classList.toggle('on-home', tab === 'home');
   setHint();
   if(tab === 'home'){ renderHome(); $('#feed').innerHTML = ''; return; }
@@ -823,16 +655,14 @@ function buildDesk(focus){
   world.innerHTML = U(out.html);
   $('#feed').innerHTML = U(out.feed);
   firstCluster = out.first;
-  markPlaying();
   requestAnimationFrame(() => {
     const c = clusters[focus || out.first] || clusters[out.first];
     if(c) flyTo(c.x0 - 40, c.y0 - 40, c.x1 + 40, c.y1 + 40, 40);
     world.classList.remove('fly'); applyCam();
     if(focus) setTimeout(() => focusCluster(focus), 60);
-    if(tab === 'music') setTimeout(() => { const s = world.querySelector('.album'); if(s && tab === 'music') toggleAlbum(s, 0, true); }, 900);
   });
 }
-function setHint(){ $('#hint').textContent = tab === 'music' ? T[lang].hintMusic : tab === 'skins' ? T[lang].hintSkins : T[lang].hint; }
+function setHint(){ $('#hint').textContent = T[lang].hint; }
 $('#feed').addEventListener('click', e => { const p = e.target.closest('[data-k]'); if(p && !e.target.closest('video')) activate(p); });
 world.addEventListener('animationend', e => { if(e.animationName === 'drop' || e.animationName === 'ping') e.target.classList.remove('drop','ping'); });
 
@@ -847,144 +677,6 @@ world.addEventListener('pointerout', e => {
   const s = e.target.closest('.vprint'); if(!s || s.contains(e.relatedTarget)) return;
   s.querySelector('video').pause(); s.querySelector('.scr').classList.remove('live');
 });
-
-/* ---------------- skins: spin with inertia ---------------- */
-const SPIN = new Map();
-const spinState = f => { if(!SPIN.has(f)) SPIN.set(f, { ry: -25 + Math.random() * 50, v: 0, held: false }); return SPIN.get(f); };
-function spinGrab(f){ const s = spinState(f); s.held = true; s.v = 0; }
-function spinMove(f, dx){ const s = spinState(f); s.ry += dx * .8; s.v = dx * .8; f.style.transform = `rotateX(-14deg) rotateY(${s.ry}deg)`; }
-function spinDrop(f){ spinState(f).held = false; }
-(function spinLoop(){
-  document.querySelectorAll('.fig').forEach(f => {
-    const s = spinState(f); if(s.held) return;
-    s.v += ((reduced ? 0 : .35) - s.v) * .025; s.ry += s.v;
-    f.style.transform = `rotateX(-14deg) rotateY(${s.ry.toFixed(2)}deg)`;
-  });
-  requestAnimationFrame(spinLoop);
-})();
-/* the phone feed spins figures by touch too */
-let fspin = null;
-$('#feed').addEventListener('pointerdown', e => { const f = e.target.closest('.fig'); if(!f || e.target.closest('.plate')) return; fspin = { f, x: e.clientX, id: e.pointerId }; spinGrab(f); });
-addEventListener('pointermove', e => { if(fspin && e.pointerId === fspin.id){ spinMove(fspin.f, e.clientX - fspin.x); fspin.x = e.clientX; } });
-['pointerup','pointercancel'].forEach(t => addEventListener(t, e => { if(fspin && e.pointerId === fspin.id){ spinDrop(fspin.f); fspin = null; } }));
-
-/* ---------------- music: albums spill tracks on a thread ---------------- */
-const openAlbums = new Map(); // album index -> [track elements]
-const leaving = new Map();    // album index -> tracks flying back in
-const albGen = {};
-function toWorld(el){
-  const m = new DOMMatrix(getComputedStyle(world).transform), dr = desk.getBoundingClientRect(), b = el.getBoundingClientRect();
-  return { x: (b.left + b.width / 2 - dr.left - m.e) / m.a, y: (b.top + b.height / 2 - dr.top - m.f) / m.a };
-}
-function drawThreads(){
-  const svg = $('#threads'); if(!svg) return;
-  let d = '';
-  const both = new Map(openAlbums);
-  leaving.forEach((els, ai) => both.set(ai, (both.get(ai) || []).concat(els)));
-  both.forEach((els, ai) => {
-    const al = world.querySelector(`.album[data-c="m-${ALBUMS[ai].id}"] .sleeve`); if(!al) return;
-    const a = toWorld(al);
-    els.forEach(el => {
-      const t = toWorld(el), sag = 40 + Math.abs(t.x - a.x) * .12;
-      const on = el.classList.contains('playing') ? ' class="on"' : '';
-      d += `<path${on} d="M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${((a.x + t.x) / 2).toFixed(1)} ${(Math.max(a.y, t.y) + sag).toFixed(1)} ${t.x.toFixed(1)} ${t.y.toFixed(1)}"/>`;
-    });
-  });
-  svg.innerHTML = d;
-}
-let thrUntil = 0, thrOn = false;
-function threadsFor(ms){
-  thrUntil = Math.max(thrUntil, performance.now() + ms);
-  if(thrOn) return; thrOn = true;
-  (function loop(){ drawThreads(); if(performance.now() < thrUntil) requestAnimationFrame(loop); else thrOn = false; })();
-}
-function toggleAlbum(el, ai, want){
-  const a = ALBUMS[ai];
-  const isOpen = openAlbums.has(ai);
-  if(want !== undefined && want === isOpen) return;
-  // every click gets a new generation; timers from older clicks see the mismatch and do nothing
-  const gen = albGen[ai] = (albGen[ai] || 0) + 1;
-  const ax = parseFloat(el.style.getPropertyValue('--x')), ay = parseFloat(el.style.getPropertyValue('--y'));
-  if(isOpen){
-    el.classList.remove('open');
-    const els = openAlbums.get(ai); openAlbums.delete(ai);
-    const prev = leaving.get(ai) || []; leaving.set(ai, prev.concat(els));
-    els.forEach((t, j) => setTimeout(() => { t.style.setProperty('--x', (ax + 20) + 'px'); t.style.setProperty('--y', (ay + 110) + 'px'); t.classList.add('gone'); }, j * 30));
-    threadsFor(1000);
-    setTimeout(() => {
-      els.forEach(t => t.remove());
-      const rest = (leaving.get(ai) || []).filter(t => !els.includes(t));
-      rest.length ? leaving.set(ai, rest) : leaving.delete(ai);
-      drawThreads();
-    }, 700 + els.length * 30);
-    return;
-  }
-  el.classList.add('open');
-  // anything still flying back into this sleeve is dropped at once so tracks never double up
-  (leaving.get(ai) || []).forEach(t => t.remove()); leaving.delete(ai);
-  const r = rnd(97 + ai), frag = document.createDocumentFragment(), els = [];
-  const cols = a.tracks.length > 4 ? 2 : 1;
-  a.tracks.forEach((t, j) => {
-    const k = reg({ act:'track', a: ai, i: j });
-    const f = document.createElement('figure');
-    f.className = 'print track gone'; f.dataset.k = k; f.dataset.a = ai; f.dataset.t = j; f.tabIndex = 0;
-    f.innerHTML = `<span class="pp">▶</span><span class="n">${String(j + 1).padStart(2,'0')}</span><span class="t">${esc(nm(t[0]))}</span><span class="eq"><i></i><i></i><i></i></span>`;
-    f.style.cssText = `--x:${ax + 10}px;--y:${ay + 100}px;--r:${((r() - .5) * 30).toFixed(1)}deg`;
-    frag.appendChild(f); els.push(f);
-  });
-  $('#threads').after(frag);
-  openAlbums.set(ai, els);
-  void world.offsetWidth;
-  els.forEach((f, j) => setTimeout(() => {
-    if(albGen[ai] !== gen) return;
-    const col = cols === 2 ? j % 2 : 0, row = cols === 2 ? (j / 2 | 0) : j;
-    const tx = ax - 30 + col * 270 + (cols === 1 ? 20 : 0) + (r() - .5) * 50;
-    const ty = ay + 330 + row * (cols === 1 ? 105 : 92) + (r() - .5) * 26;
-    f.style.setProperty('--x', tx.toFixed(0) + 'px'); f.style.setProperty('--y', ty.toFixed(0) + 'px');
-    f.style.setProperty('--r', ((r() - .5) * 10).toFixed(1) + 'deg'); f.classList.remove('gone');
-  }, 40 + j * 70));
-  markPlaying(); threadsFor(1400 + a.tracks.length * 70);
-}
-
-/* the player */
-const audio = new Audio(); audio.preload = 'none'; audio.volume = .8;
-let now = null; // {a, i}
-const player = $('#player');
-function playTrack(ai, i){
-  if(now && now.a === ai && now.i === i){ audio.paused ? audio.play() : audio.pause(); return; }
-  const a = ALBUMS[ai], t = a.tracks[i];
-  now = { a: ai, i };
-  audio.src = U(`assets/music/${a.dir}/${t[1]}.mp3`); audio.play().catch(() => {});
-  updPlayer(); player.classList.add('show'); $('#vol').classList.add('show');
-}
-function updPlayer(){
-  if(!now) return;
-  const a = ALBUMS[now.a], t = a.tracks[now.i];
-  $('#pTitle').innerHTML = `${esc(nm(t[0]))}<small>${esc(a[lang])}</small>`;
-  $('#pBtn').textContent = audio.paused ? '▶' : '❚❚';
-  markPlaying();
-}
-function markPlaying(){
-  document.querySelectorAll('.track').forEach(el => {
-    const on = now && +el.dataset.a === now.a && +el.dataset.t === now.i;
-    el.classList.toggle('playing', !!on); el.classList.toggle('paused', !!on && audio.paused);
-    el.querySelector('.pp').textContent = on && !audio.paused ? '❚❚' : '▶';
-  });
-  drawThreads();
-}
-const fmt = s => isFinite(s) ? `${s / 60 | 0}:${String(s % 60 | 0).padStart(2,'0')}` : '0:00';
-audio.addEventListener('play', updPlayer); audio.addEventListener('pause', updPlayer);
-audio.addEventListener('timeupdate', () => { $('#pBar').style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + '%'; $('#pTime').textContent = fmt(audio.currentTime); });
-audio.addEventListener('ended', () => { const a = ALBUMS[now.a]; if(now.i + 1 < a.tracks.length) playTrack(now.a, now.i + 1); else updPlayer(); });
-$('#pBtn').addEventListener('click', () => { if(!now) return; audio.paused ? audio.play() : audio.pause(); });
-$('#pX').addEventListener('click', () => { audio.pause(); now = null; player.classList.remove('show'); $('#vol').classList.remove('show'); markPlaying(); });
-const vR = $('#vRange');
-function setVol(v){ v = Math.max(0, Math.min(100, v)); vR.value = v; audio.volume = v / 100; audio.muted = v === 0; vR.style.setProperty('--v', v + '%'); $('#vPct').textContent = v + '%'; $('#vMute').textContent = v === 0 ? '🔇' : v < 45 ? '🔉' : '🔊'; }
-let lastVol = 80;
-vR.addEventListener('input', () => { setVol(+vR.value); if(+vR.value) lastVol = +vR.value; });
-$('#vMute').addEventListener('click', () => setVol(+vR.value ? 0 : lastVol || 80));
-$('#vol').addEventListener('wheel', e => { e.preventDefault(); setVol(+vR.value + (e.deltaY < 0 ? 5 : -5)); }, { passive:false });
-$('#pProg').addEventListener('click', e => { const r = $('#pProg .rail').getBoundingClientRect(); if(audio.duration) audio.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * audio.duration; });
 
 /* ---------------- contact: copy the mail ---------------- */
 function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1600); }
@@ -1050,7 +742,7 @@ document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click'
   document.querySelectorAll('[data-lang]').forEach(x => x.setAttribute('aria-pressed', x.dataset.lang === lang));
   document.documentElement.lang = lang;
   $('#home').textContent = T[lang].home; $('#lbX').textContent = T[lang].close;
-  closeStack(); renderTabs(); buildDesk(); updPlayer();
+  closeStack(); renderTabs(); buildDesk();
 }));
 
 /* ---------------- preloader: pull every asset in before the desk opens ---------------- */
@@ -1060,8 +752,6 @@ function assetList(){
   R3D.forEach(w => L.add(`assets/3d/${w[0]}.webp`));
   VIDEOS.forEach(v => { L.add(`assets/video/${v.f}.webp`); L.add(`assets/video/${v.f}.mp4`); });
   CHARS.forEach(c => { L.add(`assets/characters/${c.f}.webp`); (c.extra || []).forEach(e => L.add(`assets/characters/extra/${e[0]}.webp`)); });
-  SKINS.forEach(t => L.add(t));
-  ALBUMS.forEach(a => { if(a.cover) L.add(a.cover); });
   return [...L];
 }
 function preload(){
@@ -1129,16 +819,7 @@ function preload(){
     setTimeout(() => { pre.remove(); document.body.classList.remove('loading'); }, 1250);
   });
 }
-/* tracks are heavy, so they follow in the background once the desk is open; until one lands it simply streams */
-function trackList(){ const L = []; ALBUMS.forEach(a => a.tracks.forEach(t => L.push(`assets/music/${a.dir}/${t[1]}.mp3`))); return L; }
-async function loadMusic(){
-  const list = trackList();
-  // the track that is playing (or the next one) jumps the queue
-  const next = () => { if(now){ const a = ALBUMS[now.a]; for(let j = now.i; j < a.tracks.length; j++){ const p = `assets/music/${a.dir}/${a.tracks[j][1]}.mp3`; const k = list.indexOf(p); if(k >= 0) return list.splice(k, 1)[0]; } } return list.shift(); };
-  const worker = async () => { for(let p; (p = next());){ try{ const r = await fetch(p); if(r.ok) BLOB[p] = URL.createObjectURL(await r.blob()); }catch(e){} } };
-  await Promise.all([worker(), worker()]);
-}
-preload().then(() => setTimeout(loadMusic, 1500));
+preload();
 })();
 </script>
 
