@@ -228,6 +228,23 @@ body.loading{overflow:hidden}
 @keyframes blink{50%{opacity:.2}}
 
 
+/* music: a demo card — play square, title, a waveform that fills red while the excerpt plays */
+.mt-top{display:flex;justify-content:space-between;margin-bottom:10px;font:500 11px/1 var(--f-code);color:var(--ink-2)}
+.mt-main{display:flex;gap:12px;align-items:center}
+.mt-play{flex:0 0 auto;width:54px;height:54px;border:2px solid var(--ink);background:var(--yellow);color:var(--ink);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;transition:transform .15s,box-shadow .15s,background .15s,color .15s}
+.mt-play::before{content:"";width:0;height:0;border-left:16px solid currentColor;border-block:10px solid transparent;margin-left:5px}
+.print:hover .mt-play{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.mt.on .mt-play{background:var(--red);color:#fff}
+.mt.on .mt-play::before{width:6px;height:18px;border:0;margin:0;background:currentColor;box-shadow:12px 0 0 currentColor;transform:translateX(-6px)}
+.mt-name b{display:block;font:700 18px/1.15 var(--f-code)}
+.mt-name b i{font-style:normal;color:var(--red)}
+.mt-name span{display:block;margin-top:4px;font:400 12px/1.3 var(--f-mono);color:var(--ink-2)}
+.wave{display:flex;align-items:center;gap:2px;height:46px;margin-top:14px;border-block:1.5px dashed rgba(20,20,20,.25)}
+.wave i{flex:1;min-width:2px;background:var(--ink);opacity:.8;border-radius:1px}
+.wave i.on{background:var(--red);opacity:1}
+.mt-tags{margin-top:9px;font:400 11px/1.3 var(--f-mono);color:var(--ink-2)}
+.print:has(.mt.on){box-shadow:9px 9px 0 var(--sh)}
+
 .toast{position:fixed;left:50%;top:calc(var(--headh) + 18px);z-index:70;transform:translate(-50%,-30px) rotate(-2deg);opacity:0;pointer-events:none;background:var(--yellow);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:10px 14px;font:700 14px/1 var(--f-code);transition:transform .45s var(--spring),opacity .2s}
 .toast.show{opacity:1;transform:translate(-50%,0) rotate(-2deg)}
 
@@ -284,9 +301,9 @@ body.loading{overflow:hidden}
 const $ = s => document.querySelector(s);
 let lang = 'ru';
 const T = {
-  ru:{ hint:'удерживай и тащи · колесо — масштаб · клик — открыть',
+  ru:{ hint:'удерживай и тащи · колесо — масштаб · клик — открыть', hintMusic:'удерживай и тащи · колесо — масштаб · клик — слушать',
        home:'↩ Вернуться к работам', close:'закрыть ✕', pcs:'шт.', copied:'Скопировано!', open:'открыть ↗', copy:'клик — скопировать' },
-  en:{ hint:'hold and drag · wheel to zoom · click to open',
+  en:{ hint:'hold and drag · wheel to zoom · click to open', hintMusic:'hold and drag · wheel to zoom · click to play',
        home:'↩ Back to the work', close:'close ✕', pcs:'pcs', copied:'Copied!', open:'open ↗', copy:'click to copy' }
 };
 const TABS = [
@@ -300,6 +317,7 @@ const TABS = [
   { id:'dev', ru:'Разработка', en:'DEV' },
   { id:'3d', ru:'3D', en:'3D' },
   { id:'video', ru:'Видео', en:'Video' },
+  { id:'music', ru:'Музыка', en:'Music' },
   { id:'characters', ru:'Персонажи', en:'Characters' },
   { id:'connect', ru:'Связь', en:'Contact' }
 ];
@@ -335,11 +353,42 @@ const CHARS = [
   { name:'Sable', f:'sable', w:1499, h:1049, ...RANDOM },
   { name:'Маргарита', nameEn:'Margarita', f:'margarita', w:1680, h:946, ru:'Одна из самых долгих работ — на создание этого персонажа ушло 6 часов.', en:'One of the longest pieces to make — this character took 6 hours.' }
 ];
-const SIZES = {"assets/design/posters/deti-cvety.webp":193988,"assets/design/posters/poster-leyn.webp":215552,"assets/design/previews/neyroset-polgoda.webp":152562,"assets/design/previews/buton-v-den.webp":156918,"assets/design/card-sneakers.webp":124550,"assets/design/card-screwdriver.webp":81508,"assets/design/debian.webp":306656,"assets/design/card-smartband.webp":90110,"assets/design/card-sky-toy.webp":80328,"assets/design/card-ushanka.webp":174784,"assets/design/benzin-bold.webp":236774,"assets/design/card-lego.webp":105986,"assets/design/posters/mansard.webp":29088,"assets/design/posters/kasse-poster.webp":506032,"assets/design/posters/rozygrysh.webp":74012,"assets/design/diverron/yagodny-farm.webp":228358,"assets/design/diverron/stroyka.webp":152152,"assets/design/diverron/scam.webp":124942,"assets/design/diverron/bespolezno.webp":206650,"assets/design/diverron/luchshiy-start.webp":119306,"assets/design/diverron/10-strategiy.webp":110552,"assets/design/diverron/keysy-20k.webp":160408,"assets/design/diverron/karta-ofis.webp":128226,"assets/design/diverron/ccd-planet.webp":102982,"assets/design/diverron/muzhskoe-zhenskoe.webp":193294,"assets/design/diverron/metro-poezd.webp":158322,"assets/design/diverron/pshenic.webp":182802,"assets/design/emotes-static/cool.webp":51616,"assets/design/emotes-static/angry.webp":43044,"assets/design/emotes-static/w.webp":50384,"assets/design/emotes-static/heart.webp":53846,"assets/design/emotes-static/clown.webp":69070,"assets/design/covers/desliza.webp":396304,"assets/design/covers/kusaysya-gromche.webp":274820,"assets/design/covers/treme-o-chao.webp":659456,"assets/design/covers/fall-through-the-floor.webp":42412,"assets/design/covers/no-sleeppp.webp":152186,"assets/design/emotes/shock.webp":8104,"assets/design/emotes/popcorn.webp":12426,"assets/design/emotes/fun.webp":10600,"assets/design/emotes/condemn.webp":11360,"assets/design/emotes/music.webp":11874,"assets/characters/ashigawa.webp":87360,"assets/characters/grave.webp":70936,"assets/characters/ashwood.webp":78118,"assets/characters/true-lamex.webp":110872,"assets/characters/sable.webp":126384,"assets/characters/margarita.webp":120416,"assets/characters/extra/grave-fall.webp":141114,"assets/characters/extra/lamex-chrome.webp":437162,"assets/characters/extra/lamex-teeth.webp":184924,"assets/characters/extra/lamex-chrome-banner.webp":159796,"assets/characters/extra/lamex-l.webp":219880,"assets/dev/mawrelle.svg":408509,"assets/dev/aura-drop.webp":36110,"assets/icons/icon-32.png":1254,"assets/icons/icon-180.png":8960,"assets/icons/icon-192.png":9603,"assets/icons/icon-512.png":16270,"assets/3d/angel.webp":123342,"assets/3d/supermarket.webp":46658,"assets/3d/cigarette.webp":125812,"assets/video/day1.webp":42412,"assets/video/levan-token.webp":8676,"assets/video/day2.webp":38078,"assets/video/day1.mp4":1277269,"assets/video/pulse.mp4":3510422,"assets/video/vfx-edit.mp4":6255291,"assets/video/pulse.webp":42192,"assets/video/platform-review.webp":68914,"assets/video/day2.mp4":1000806,"assets/video/teamtree.webp":33158,"assets/video/vfx-edit.webp":31744,"assets/video/levan-token.mp4":3993454,"assets/video/teamtree.mp4":4280965,"assets/video/platform-review.mp4":3462067,"assets/video/linux-myths.mp4":8593974,"assets/video/linux-myths.webp":7424,"assets/video/linux-theatre.mp4":6791205,"assets/video/linux-theatre.webp":32418,"assets/video/skin-day3.mp4":788669,"assets/video/skin-day3.webp":13462,"assets/video/linux-theatre-de.mp4":7412687,"assets/video/linux-theatre-de.webp":34258};
+const SIZES = {"assets/design/posters/deti-cvety.webp":193988,"assets/design/posters/poster-leyn.webp":215552,"assets/design/previews/neyroset-polgoda.webp":152562,"assets/design/previews/buton-v-den.webp":156918,"assets/design/card-sneakers.webp":124550,"assets/design/card-screwdriver.webp":81508,"assets/design/debian.webp":306656,"assets/design/card-smartband.webp":90110,"assets/design/card-sky-toy.webp":80328,"assets/design/card-ushanka.webp":174784,"assets/design/benzin-bold.webp":236774,"assets/design/card-lego.webp":105986,"assets/design/posters/mansard.webp":29088,"assets/design/posters/kasse-poster.webp":506032,"assets/design/posters/rozygrysh.webp":74012,"assets/design/diverron/yagodny-farm.webp":228358,"assets/design/diverron/stroyka.webp":152152,"assets/design/diverron/scam.webp":124942,"assets/design/diverron/bespolezno.webp":206650,"assets/design/diverron/luchshiy-start.webp":119306,"assets/design/diverron/10-strategiy.webp":110552,"assets/design/diverron/keysy-20k.webp":160408,"assets/design/diverron/karta-ofis.webp":128226,"assets/design/diverron/ccd-planet.webp":102982,"assets/design/diverron/muzhskoe-zhenskoe.webp":193294,"assets/design/diverron/metro-poezd.webp":158322,"assets/design/diverron/pshenic.webp":182802,"assets/design/emotes-static/cool.webp":51616,"assets/design/emotes-static/angry.webp":43044,"assets/design/emotes-static/w.webp":50384,"assets/design/emotes-static/heart.webp":53846,"assets/design/emotes-static/clown.webp":69070,"assets/design/covers/desliza.webp":396304,"assets/design/covers/kusaysya-gromche.webp":274820,"assets/design/covers/treme-o-chao.webp":659456,"assets/design/covers/fall-through-the-floor.webp":42412,"assets/design/covers/no-sleeppp.webp":152186,"assets/design/emotes/shock.webp":8104,"assets/design/emotes/popcorn.webp":12426,"assets/design/emotes/fun.webp":10600,"assets/design/emotes/condemn.webp":11360,"assets/design/emotes/music.webp":11874,"assets/characters/ashigawa.webp":87360,"assets/characters/grave.webp":70936,"assets/characters/ashwood.webp":78118,"assets/characters/true-lamex.webp":110872,"assets/characters/sable.webp":126384,"assets/characters/margarita.webp":120416,"assets/characters/extra/grave-fall.webp":141114,"assets/characters/extra/lamex-chrome.webp":437162,"assets/characters/extra/lamex-teeth.webp":184924,"assets/characters/extra/lamex-chrome-banner.webp":159796,"assets/characters/extra/lamex-l.webp":219880,"assets/dev/mawrelle.svg":408509,"assets/dev/aura-drop.webp":36110,"assets/icons/icon-32.png":1254,"assets/icons/icon-180.png":8960,"assets/icons/icon-192.png":9603,"assets/icons/icon-512.png":16270,"assets/3d/angel.webp":123342,"assets/3d/supermarket.webp":46658,"assets/3d/cigarette.webp":125812,"assets/video/day1.webp":42412,"assets/video/levan-token.webp":8676,"assets/video/day2.webp":38078,"assets/video/day1.mp4":1277269,"assets/video/pulse.mp4":3510422,"assets/video/vfx-edit.mp4":6255291,"assets/video/pulse.webp":42192,"assets/video/platform-review.webp":68914,"assets/video/day2.mp4":1000806,"assets/video/teamtree.webp":33158,"assets/video/vfx-edit.webp":31744,"assets/video/levan-token.mp4":3993454,"assets/video/teamtree.mp4":4280965,"assets/video/platform-review.mp4":3462067,"assets/video/linux-myths.mp4":8593974,"assets/video/linux-myths.webp":7424,"assets/video/linux-theatre.mp4":6791205,"assets/video/linux-theatre.webp":32418,"assets/video/skin-day3.mp4":788669,"assets/video/skin-day3.webp":13462,"assets/video/linux-theatre-de.mp4":7412687,"assets/video/linux-theatre-de.webp":34258,"assets/music/tiptoe-parade.mp3":181334,"assets/music/cracked-clock-polka.mp3":181334,"assets/music/teacup-waltz.mp3":181334,"assets/music/dusty-boots.mp3":181334};
 const BLOB = {};
 const U = str => String(str).replace(/assets\/[\w\-\/\.]+/g, m => BLOB[m] || m);
 const TG = 'https://t.me/lamex30', SC = 'https://soundcloud.com/shibushibuu', MAIL = 'l4mex@protonmail.com', MAW = 'https://lamex30.github.io/mawrelle/', AURA = 'https://lamex30.github.io/aura-drop/';
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------------- music: short excerpts, one plays at a time ---------------- */
+const MUSIC = [
+  { f:'tiptoe-parade', name:'Tiptoe Parade', d:9, ru:'крадущийся марш · 88 BPM', en:'sneaking march · 88 BPM', tags:{ ru:'окарина · флейта · туба · фагот', en:'ocarina · flute · tuba · bassoon' },
+    w:[66,69,64,74,59,61,81,97,79,68,77,78,74,92,97,69,62,78,78,76,98,95,71,77,56,61,62,80,77,59,90,53,68,83,100,87,70,98,73,47,45,24,14,14] },
+  { f:'cracked-clock-polka', name:'Cracked Clock Polka', d:9, ru:'нервная полька · 112 BPM', en:'jittery polka · 112 BPM', tags:{ ru:'труба · ксилофон · туба · аккордеон', en:'muted trumpet · xylophone · tuba · accordion' },
+    w:[93,82,52,59,64,64,80,59,54,57,55,83,60,64,56,64,95,100,57,74,50,94,72,54,75,82,81,98,65,75,73,68,97,69,69,86,62,74,63,31,28,14,14,14] },
+  { f:'teacup-waltz', name:'Teacup Waltz', d:9, ru:'грустный вальс · 104 BPM', en:'wistful waltz · 104 BPM', tags:{ ru:'виолончель · арфа · пиццикато · челеста', en:'cello · harp · pizzicato · celesta' },
+    w:[80,86,74,100,92,87,74,68,88,67,53,66,55,48,77,71,55,95,96,82,73,71,66,64,63,88,89,74,83,71,63,56,67,78,94,95,90,77,57,46,26,25,14,14] },
+  { f:'dusty-boots', name:'Dusty Boots', d:9, ru:'бодрый хоудаун · 120 BPM', en:'upbeat hoedown · 120 BPM', tags:{ ru:'фиддл · банджо · туба · гитара', en:'fiddle · banjo · tuba · guitar' },
+    w:[78,100,71,82,62,63,59,52,57,51,88,91,64,56,54,66,54,85,97,84,85,64,95,70,51,57,46,67,60,57,77,61,57,44,55,57,67,94,77,42,33,21,14,14] },
+];
+const fmt = t => { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
+const au = new Audio(); au.preload = 'auto';
+let curT = -1, rafA = 0;
+const mCards = i => document.querySelectorAll(`.mt[data-t="${i}"]`);
+function mtReset(i){ mCards(i).forEach(c => { c.classList.remove('on'); c.querySelectorAll('.wave i').forEach(b => b.classList.remove('on')); c.querySelector('.mt-t').textContent = '0:00 / ' + fmt(MUSIC[i].d); }); }
+function mtPaint(i){
+  const dur = au.duration || MUSIC[i].d, p = Math.min(1, au.currentTime / dur);
+  mCards(i).forEach(c => { const bars = c.querySelectorAll('.wave i'), n = Math.round(p * bars.length); bars.forEach((b, j) => b.classList.toggle('on', j < n)); c.querySelector('.mt-t').textContent = fmt(au.currentTime) + ' / ' + fmt(dur); });
+}
+function stopAudio(){ au.pause(); cancelAnimationFrame(rafA); if(curT >= 0) mtReset(curT); curT = -1; }
+function toggleTrack(i){
+  if(curT === i && !au.paused){ au.pause(); cancelAnimationFrame(rafA); mCards(i).forEach(c => c.classList.remove('on')); return; }
+  if(curT !== i){ stopAudio(); curT = i; au.src = U('assets/music/' + MUSIC[i].f + '.mp3'); }
+  mCards(i).forEach(c => c.classList.add('on'));
+  au.play().catch(() => mCards(i).forEach(c => c.classList.remove('on')));
+  cancelAnimationFrame(rafA);
+  (function tick(){ mtPaint(i); rafA = requestAnimationFrame(tick); })();
+}
+au.addEventListener('ended', () => { cancelAnimationFrame(rafA); const i = curT; curT = -1; if(i >= 0) mtReset(i); });
 
 /* ---------------- the shape-shifting wordmark ---------------- */
 const FONTS = [
@@ -499,6 +548,7 @@ function activate(el){
   if(it.act === 'lb') openLb(it.gal, it.i);
   else if(it.act === 'link') window.open(it.url, '_blank', 'noopener');
   else if(it.act === 'copy') copyMail();
+  else if(it.act === 'play') toggleTrack(it.i);
 }
 
 /* ---------------- layout helpers ---------------- */
@@ -591,6 +641,26 @@ const BUILD = {
     c.x0 -= 460; bounds.x0 -= 460;
     return { html, feed: feed.replace('</h2>', `</h2><div class="print note" style="--r:-2deg">${qn}</div>`), first:'video' };
   },
+  music(r){
+    const L = lang === 'ru';
+    const card = (m, i) => `<div class="mt" data-t="${i}"><div class="mt-top"><span>demo ${String(i + 1).padStart(2, '0')}</span><span class="mt-t">0:00 / ${fmt(m.d)}</span></div><div class="mt-main"><span class="mt-play" aria-hidden="true"></span><div class="mt-name"><b>${esc(m.name)}<i>*</i></b><span>${m[lang]}</span></div></div><div class="wave" aria-hidden="true">${m.w.map(h => `<i style="height:${h}%"></i>`).join('')}</div><div class="mt-tags">${m.tags[lang]}</div></div>`;
+    const pos = [[0, 90, -2], [370, 50, 2.5], [740, 100, -1.5], [100, 400, 1.5]];
+    let html = '', feed = '';
+    MUSIC.forEach((m, i) => {
+      const inner = card(m, i);
+      html += sheetHTML({ k: reg({ act:'play', i }), c:'music', x:pos[i][0], y:pos[i][1], r:pos[i][2], w:330, inner, label: m.name + ' — ' + m[lang] });
+      feed += feedPrint(reg({ act:'play', i }), inner, '', ((r() - .5) * 4).toFixed(1));
+    });
+    const note = `<span class="big">${L ? 'только отрезки' : 'just excerpts'}</span>${L
+      ? 'Это лишь короткие отрывки по 8–10 секунд. Такие треки, а также музыку в других жанрах, я делаю на заказ: для видео на YouTube, рекламных роликов и не только.'
+      : 'These are just short 8–10 second excerpts. I make tracks like these, and music in other genres, to order: for YouTube videos, ad spots and more.'}<br><span class="go">${L ? 'заказать музыку ↗' : 'order music ↗'}</span>`;
+    html += sheetHTML({ k: reg({ act:'link', url: TG }), c:'music', cls:'note red', x:520, y:420, r:-3, w:410, inner: note });
+    feed += feedPrint(reg({ act:'link', url: TG }), note, 'note red', -1.5);
+    html += label(0, 0, -2, L ? 'музыка' : 'music', L ? 'отрывки · 9 сек' : 'excerpts · 9 sec');
+    clusters.music = { x0:-20, y0:-10, x1:1100, y1:700 };
+    bounds = { x0:-40, y0:-20, x1:1120, y1:720 };
+    return { html, feed: feedSec('music', L ? 'музыка' : 'music', feed), first:'music' };
+  },
   characters(r){
     let feed = '';
     const items = CHARS.map(c => {
@@ -647,6 +717,7 @@ const BUILD = {
 };
 let firstCluster = null;
 function buildDesk(focus){
+  stopAudio();
   world.innerHTML = ''; REG = []; clusters = {}; delay = 0;
   document.body.classList.toggle('on-home', tab === 'home');
   setHint();
@@ -663,7 +734,7 @@ function buildDesk(focus){
     if(focus) setTimeout(() => focusCluster(focus), 60);
   });
 }
-function setHint(){ $('#hint').textContent = T[lang].hint; }
+function setHint(){ $('#hint').textContent = tab === 'music' ? T[lang].hintMusic : T[lang].hint; }
 $('#feed').addEventListener('click', e => { const p = e.target.closest('[data-k]'); if(p && !e.target.closest('video')) activate(p); });
 world.addEventListener('animationend', e => { if(e.animationName === 'drop' || e.animationName === 'ping') e.target.classList.remove('drop','ping'); });
 
@@ -751,6 +822,7 @@ function assetList(){
   const L = new Set(['assets/dev/mawrelle.svg', 'assets/dev/aura-drop.webp', 'assets/characters/true-lamex.webp']);
   Object.values(WORKS).forEach(list => list.forEach(w => L.add(D + w[0] + '.webp')));
   R3D.forEach(w => L.add(`assets/3d/${w[0]}.webp`));
+  MUSIC.forEach(m => L.add(`assets/music/${m.f}.mp3`));
   VIDEOS.forEach(v => { L.add(`assets/video/${v.f}.webp`); L.add(`assets/video/${v.f}.mp4`); });
   CHARS.forEach(c => { L.add(`assets/characters/${c.f}.webp`); (c.extra || []).forEach(e => L.add(`assets/characters/extra/${e[0]}.webp`)); });
   return [...L];
