@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ru" class="locked">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Маме — 18 ✂️ С днём рождения!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,500;1,300;1,500&family=Manrope:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ==================== СЦЕНА 0: ТАЛОН НА ЗАПИСЬ ==================== -->
+<div id="intro">
+  <svg class="bgwaves" viewBox="0 0 600 800" preserveAspectRatio="none">
+    <path d="M-20 120 Q180 60 320 160 T620 120" fill="none" stroke="#e8b4a0" stroke-width="2"/>
+    <path d="M-20 260 Q200 320 360 220 T620 280" fill="none" stroke="#b76e79" stroke-width="1.5"/>
+    <path d="M-20 560 Q160 500 340 600 T620 540" fill="none" stroke="#d4949a" stroke-width="2"/>
+    <path d="M-20 680 Q220 740 400 640 T620 700" fill="none" stroke="#e8b4a0" stroke-width="1.5"/>
+  </svg>
+  <div class="ticket">
+    <div class="salon">САЛОН «ДЕНЬ РОЖДЕНИЯ»</div>
+    <h3>Талон на запись</h3>
+    <div class="no">№ 000018</div>
+    <div class="r"><span>Клиент</span><b>Мама</b></div>
+    <div class="r"><span>Мастер</span><b>Вся семья</b></div>
+    <div class="r"><span>Услуга</span><b>Праздник полного цикла</b></div>
+    <div class="r"><span>Дата</span><b>24 ноября</b></div>
+    <div class="r"><span>Стоимость</span><b>Бесценно</b></div>
+    <div class="stamp" id="stamp">ПОДТВЕРЖДЕНО</div>
+  </div>
+  <button class="holdbtn" id="holdBtn" type="button">
+    ЗАЖМИ,<br>ЧТОБЫ<br>НАЧАТЬ
+    <svg viewBox="0 0 142 142">
+      <circle cx="71" cy="71" r="65" fill="none" stroke="#b76e7928" stroke-width="5"/>
+      <circle id="holdRing" cx="71" cy="71" r="65" fill="none" stroke="#b76e79" stroke-width="5" stroke-linecap="round" stroke-dasharray="408" stroke-dashoffset="408"/>
+    </svg>
+  </button>
+  <p class="hint" id="holdHint">Удерживай кнопку, пока кольцо не заполнится</p>
+</div>
+
+<!-- ==================== БОКОВОЙ ПРОГРЕСС, ЗВУК, ИНСТРУМЕНТЫ ==================== -->
+<svg id="prog" viewBox="0 0 18 1000" preserveAspectRatio="none">
+  <path id="progBg" stroke="#b76e7928" stroke-width="2" fill="none" vector-effect="non-scaling-stroke"/>
+  <path id="progP" stroke="#b76e79" stroke-width="3" fill="none" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+</svg>
+<button id="snd" type="button" aria-label="Звук">🔊</button>
+
+<svg class="tool" id="scis" style="right:3vw;top:28vh;width:68px" viewBox="0 0 100 100" fill="none" stroke="#b76e79" stroke-width="2">
+  <g id="bladeA"><circle cx="30" cy="80" r="11"/><path d="M37 72 L50 45 L72 8"/></g>
+  <g id="bladeB"><circle cx="70" cy="80" r="11"/><path d="M63 72 L50 45 L28 8"/></g>
+  <circle cx="50" cy="45" r="2.5" fill="#b76e79"/>
+</svg>
+<svg class="tool" id="combT" style="left:5vw;top:66vh;width:86px" viewBox="0 0 120 40" fill="none" stroke="#b76e79" stroke-width="2">
+  <rect x="2" y="2" width="116" height="12" rx="6"/>
+  <path d="M10 14v22M20 14v22M30 14v22M40 14v22M50 14v22M60 14v22M70 14v22M80 14v22M90 14v22M100 14v22M110 14v22"/>
+</svg>
+
+<main id="app">
+
+<!-- ==================== СЦЕНА 1: ОБЛОЖКА ==================== -->
+<section id="hero" data-stage="0">
+  <svg id="waves" preserveAspectRatio="none"></svg>
+  <div class="hero-in">
+    <div class="kicker">24 · 11</div>
+    <div class="arch" id="arch"><img src="assets/family/mama-selfie.jpg" alt="Мама"></div>
+    <h1 id="title">Мама,<br><em>с днём рождения</em></h1>
+    <div class="scroll-hint">листай вниз ↓</div>
+  </div>
+</section>
+
+<!-- ==================== СЦЕНА 2: СКОЛЬКО ТЕБЕ ЛЕТ? (GATE 1) ==================== -->
+<section id="ageSec" class="center" data-stage="0" data-gate="1">
+  <div class="kicker rv">процедура № 1 · проявление</div>
+  <h2 class="t sheen rv">Сколько тебе <em>сегодня?</em></h2>
+  <p class="body words-rv rv">Говорят, у тебя день рождения. Но сколько тебе — секрет даже для нас. Ты же колорист — проявим?</p>
+  <div class="age-wrap" id="ageWrap">
+    <canvas id="ageUnder"></canvas>
+    <canvas id="ageOver"></canvas>
+  </div>
+  <p class="hint pulse" id="ageHint">🖌 Проведи кистью по слою краски</p>
+  <div class="done" id="ageDone">
+    <h3>Официально: 18.</h3>
+    <p>Документы не принимаются, паспорт не предъявляется 😉</p>
+  </div>
+  <div class="gate-status" data-gate-status="1">🔒 Прояви цифру кистью, чтобы пройти дальше</div>
+</section>
+
+<!-- ==================== СЦЕНА 3: РАСПУТАЙ ПРЯДИ (GATE 2) ==================== -->
+<section id="combSec" class="center gated-hidden" data-stage="1" data-gate="2">
+  <div class="kicker rv">процедура № 2 · укладка</div>
+  <h2 class="t rv">Что-то тут <em>запуталось…</em></h2>
+  <p class="hint pulse" id="combHint">🪮 Проведи расчёской по прядям</p>
+  <div class="comb-area" id="combArea">
+    <div class="comb-msg">
+      <h3>С днём рождения, мама! ❤️</h3>
+      <p>Сегодня праздник у самого красивого человека, которого мы знаем. У человека, который столько лет делает красивыми других — и при этом сама выглядит так, что никто не верит, сколько ей. Поэтому мы и не говорим. 18 — и точка.</p>
+    </div>
+    <canvas id="tangle"></canvas>
+  </div>
+  <div class="bar"><i id="combProg"></i></div>
+  <div class="gate-status" data-gate-status="2">🔒 Расчеши пряди, чтобы открыть продолжение</div>
+</section>
+
+<!-- ==================== СЦЕНА 4: ТРЕТИЙ ДЕСЯТОК (СКРОЛЛ) ==================== -->
+<section id="timelineSec" class="gated-hidden" data-stage="2">
+  <div class="center" style="padding-bottom:30px">
+    <div class="kicker rv">процедура № 3 · время</div>
+    <h2 class="t sheen rv">Третий десяток<br><em>в любимом деле</em></h2>
+    <p class="body words-rv rv">Листай — прядь будет расти вместе с твоей историей</p>
+  </div>
+  <div class="track" id="track">
+    <svg id="tlsvg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="rgg" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#e8b4a0"/>
+          <stop offset=".5" stop-color="#b76e79"/>
+          <stop offset="1" stop-color="#7a3b4f"/>
+        </linearGradient>
+      </defs>
+      <path id="tlbg" fill="none" stroke="#b76e7922" stroke-width="3"/>
+      <path id="tlpath" fill="none" stroke="url(#rgg)" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="stats">
+    <div class="stat rv" id="decadeStat"><b><span class="roll" id="roll"><i>1</i><i>2</i><i>3</i></span>-й</b><small>десяток лет в профессии</small></div>
+    <div class="stat rv"><b>Тысячи</b><small>созданных образов</small></div>
+    <div class="stat rv"><b>Литры</b><small>краски, ставшей искусством</small></div>
+    <div class="stat rv"><b>∞</b><small>клиенток, ушедших счастливее, чем пришли</small></div>
+  </div>
+  <div class="center proud">
+    <p class="body rv">Ты не просто стрижёшь и красишь — ты возвращаешь людям уверенность в себе. Это не работа, это талант. И мы безумно тобой гордимся.</p>
+  </div>
+</section>
+
+<!-- ==================== СЦЕНА 5: ГАЛЕРЕЯ РАБОТ (СКРОЛЛ + ТАП) ==================== -->
+<section id="works" class="gated-hidden" data-stage="2">
+  <div class="pin">
+    <div class="head">
+      <div class="kicker">процедура № 4 · колористика</div>
+      <h2 class="t">Руки, которые<br><em>творят чудеса</em></h2>
+    </div>
+    <div class="strip" id="strip"></div>
+    <p class="note">Листай — фото окрашиваются в центре. Нажми на любое, чтобы приблизить</p>
+  </div>
+</section>
+
+<!-- ==================== СЦЕНА 6: НАЙДИ 10 ОТЛИЧИЙ (GATE 3) ==================== -->
+<section id="diffSec" class="center gated-hidden" data-stage="2" data-gate="3">
+  <div class="kicker rv">процедура № 5 · до и после</div>
+  <h2 class="t rv">Найди <em>10 отличий</em></h2>
+  <div class="diff" id="diffBox">
+    <img src="assets/family/mama-cafe.jpg" alt="Сегодня">
+    <img class="top" id="diffTop" src="assets/family/mama-cafe.jpg" alt="Год назад">
+    <span class="lbl l">Год назад: 18</span>
+    <span class="lbl r">Сегодня: 18</span>
+    <div class="handle" id="diffHandle"></div>
+  </div>
+  <p class="hint pulse" id="diffHint">↔ Потяни ползунок влево и вправо</p>
+  <p class="body diff-txt" id="diffTxt">Не нашла? Вот и мы тоже. Время на тебя просто не действует 😉</p>
+  <div class="gate-status" data-gate-status="3">🔒 Подвигай ползунок «до / после», чтобы пройти дальше</div>
+</section>
+
+<!-- ==================== СЦЕНА 7: ПРАЙС И ЗОЛОТО (GATE 4) ==================== -->
+<section id="priceSec" class="center gated-hidden" data-stage="3" data-gate="4">
+  <div class="kicker rv">процедура № 6 · пожелание</div>
+  <p class="wish rv">Желаю, чтобы твои работы стоили<br>в <span class="flip" id="flip"><span>10</span></span> раз дороже, чем сейчас!</p>
+  <div class="price">
+    <div class="mult" id="multBadge">×10</div>
+    <h3>ПРАЙС</h3>
+    <div class="prow"><span>Сложное окрашивание</span><span class="dots"></span><b class="blur" data-final="9 999 999 ₽">✶✶✶ ₽</b></div>
+    <div class="prow"><span>Стрижка + укладка</span><span class="dots"></span><b class="blur" data-final="Бесценно">✶✶✶ ₽</b></div>
+    <div class="prow"><span>Тотальное преображение</span><span class="dots"></span><b class="blur" data-final="Очередь на год">✶✶✶ ₽</b></div>
+  </div>
+  <button class="goldbtn" id="raiseBtn" type="button">Поднять цены!</button>
+  <div class="bar"><i id="goldMeter"></i></div>
+  <p class="hint" id="priceHint">👆 Тыкай быстро-быстро — шкала роскоши убывает!</p>
+  <div class="gate-status" data-gate-status="4">🔒 Заполни шкалу роскоши, чтобы пройти дальше</div>
+</section>
+
+<!-- ==================== СЦЕНА 8: ГЛАДКО С ПАШЕЙ (GATE 5) ==================== -->
+<section id="ironSec" class="center gated-hidden" data-stage="4" data-gate="5">
+  <div class="kicker rv">процедура № 7 · выпрямление</div>
+  <h2 class="t rv" style="font-size:clamp(30px,6.5vw,52px)">Чтобы с Пашей <em>всегда было…</em></h2>
+  <div class="iron-stage" id="ironStage">
+    <svg id="ironStrand"></svg>
+    <svg id="iron" viewBox="0 0 64 190">
+      <defs>
+        <linearGradient id="ig" x1="0" x2="1">
+          <stop offset="0" stop-color="#7a3b4f"/><stop offset=".5" stop-color="#b76e79"/><stop offset="1" stop-color="#7a3b4f"/>
+        </linearGradient>
+      </defs>
+      <rect x="6" y="0" width="22" height="120" rx="10" fill="url(#ig)"/>
+      <rect x="36" y="0" width="22" height="120" rx="10" fill="url(#ig)"/>
+      <rect x="10" y="20" width="14" height="80" rx="4" fill="#e8b4a0"/>
+      <rect x="40" y="20" width="14" height="80" rx="4" fill="#e8b4a0"/>
+      <rect x="8" y="112" width="48" height="78" rx="20" fill="#3b2230"/>
+      <circle cx="32" cy="140" r="5" fill="#ff6b8a"/>
+    </svg>
+  </div>
+  <p class="hint pulse" id="ironHint">← Протяни утюжок вдоль пряди →</p>
+  <div class="words3"><span>гладко</span><span>спокойно</span><span>уютно</span></div>
+  <div class="pair" id="pair">
+    <img src="assets/family/mama-pasha-mirror.jpg" style="--r:-4deg;object-position:50% 26%" alt="Мама и Паша">
+    <img src="assets/family/hands.jpg" style="--r:5deg;object-position:50% 82%" alt="Вместе">
+  </div>
+  <p class="body after" id="ironAfter">Без узелков и колтунов — только мягкость, тепло и забота друг о друге.</p>
+  <div class="gate-status" data-gate-status="5">🔒 Выпрями прядь утюжком до конца</div>
+</section>
+
+<!-- ==================== СЦЕНА 9A: ДОМ И ШНУРОК (GATE 6) ==================== -->
+<section id="kino" class="gated-hidden" data-stage="5" data-gate="6" data-night="1">
+  <div class="pin">
+    <div id="dark"></div>
+    <div class="cord" id="cord">
+      <div class="str" id="cordStr"></div>
+      <div class="bead" id="cordBead"></div>
+    </div>
+    <div class="cord-hint" id="cordHint">потяни вниз ↓</div>
+
+    <div class="kicker" style="position:relative;z-index:4">процедура № 8 · уют</div>
+    <div class="room" id="room">
+      <svg viewBox="0 0 520 300">
+        <defs>
+          <radialGradient id="lampGlow" cx="80%" cy="22%" r="65%">
+            <stop offset="0" stop-color="#ffd9a0" stop-opacity=".35"/>
+            <stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect class="glow" x="0" y="0" width="520" height="300" fill="url(#lampGlow)"/>
+        <!-- гирлянда -->
+        <path class="ln" d="M20 38 Q140 78 260 44 T500 40"/>
+        <circle class="bulb" cx="70" cy="54" r="5"/><circle class="bulb" cx="140" cy="60" r="5"/>
+        <circle class="bulb" cx="210" cy="52" r="5"/><circle class="bulb" cx="285" cy="40" r="5"/>
+        <circle class="bulb" cx="360" cy="34" r="5"/><circle class="bulb" cx="435" cy="40" r="5"/>
+        <!-- экран телевизора / проектора -->
+        <rect class="ln screen" x="155" y="74" width="210" height="94" rx="10"/>
+        <path class="ln" d="M242 121 L276 121 M256 108 L276 121 L256 134" opacity=".6"/>
+        <!-- торшер справа -->
+        <path class="ln" d="M446 130 L446 254 M426 254 L466 254"/>
+        <path class="ln fillp" d="M420 130 L432 88 L460 88 L472 130 Z"/>
+        <!-- диван с горой подушек -->
+        <rect class="ln fillp" x="62" y="182" width="330" height="68" rx="18"/>
+        <rect class="ln" x="50" y="198" width="24" height="54" rx="10"/>
+        <rect class="ln" x="380" y="198" width="24" height="54" rx="10"/>
+        <!-- подушки -->
+        <rect class="ln fillp" x="88" y="160" width="56" height="44" rx="14" transform="rotate(-8 116 182)"/>
+        <rect class="ln fillp" x="144" y="156" width="60" height="46" rx="14" transform="rotate(5 174 179)"/>
+        <rect class="ln fillp" x="204" y="162" width="54" height="42" rx="14" transform="rotate(-6 231 183)"/>
+        <rect class="ln fillp" x="260" y="156" width="58" height="46" rx="14" transform="rotate(9 289 179)"/>
+        <rect class="ln fillp" x="314" y="164" width="50" height="40" rx="14" transform="rotate(-5 339 184)"/>
+        <!-- плед и столик с кружками -->
+        <path class="ln" d="M120 220 Q150 242 180 224 T240 232" opacity=".7"/>
+        <line class="ln" x1="150" y1="274" x2="310" y2="274"/>
+        <rect class="ln" x="192" y="256" width="18" height="18" rx="3"/>
+        <path class="ln" d="M210 260 q7 0 7 5 t-7 5"/>
+        <rect class="ln" x="242" y="256" width="18" height="18" rx="3"/>
+        <path class="ln" d="M260 260 q7 0 7 5 t-7 5"/>
+      </svg>
+    </div>
+    <div class="kino-txt">
+      <div class="a">
+        <h2 class="t" style="font-size:clamp(30px,7vw,48px)">Свет погас…</h2>
+        <p class="body" style="opacity:.75">Потяни за шнурок торшера справа</p>
+      </div>
+      <div class="b">
+        <h2 class="t" style="font-size:clamp(30px,7vw,48px)">Уют и <em>добро</em></h2>
+        <p class="body">Желаю, чтобы в вашем доме всегда было тепло, светло и спокойно.</p>
+      </div>
+    </div>
+    <div class="gate-status" data-gate-status="6" style="position:relative;z-index:4">🔒 Потяни шнурок торшера, чтобы включить свет</div>
+  </div>
+</section>
+
+<!-- ==================== СЦЕНА 9B: ПОПКОРН (GATE 7) ==================== -->
+<section id="popSec" class="center gated-hidden" data-stage="6" data-gate="7" data-night="1">
+  <div class="kicker">киновечер · шаг 2</div>
+  <h2 class="t">Приготовь <em>попкорн</em></h2>
+  <p class="pop-count" id="popCount">0 / 15</p>
+  <div class="pan" id="pan">
+    <div class="bucket">
+      <div class="fillc" id="bucketFill"></div>
+      <div class="cup"></div>
+    </div>
+  </div>
+  <p class="hint pulse" id="popHint">🍿 Тыкай по зёрнышкам, чтобы они лопнули</p>
+  <div class="gate-status" data-gate-status="7">🔒 Лопни 15 зёрен попкорна к фильму</div>
+</section>
+
+<!-- ==================== СЦЕНА 9C: БИЛЕТ В КИНО (GATE 8) ==================== -->
+<section id="ticketSec" class="center gated-hidden" data-stage="7" data-gate="8" data-night="1">
+  <div class="kicker">киновечер · шаг 3</div>
+  <h2 class="t">Ваш <em>билет</em></h2>
+  <div class="cine show" id="cine">
+    <div class="main">
+      <img src="assets/family/mama-cinema.jpg" alt="Киновечер">
+      <div>
+        <h4>🎬 КИНОВЕЧЕР</h4>
+        <p><span>Зал:</span> Ваш дом</p>
+        <p><span>Ряд:</span> Диван с подушками</p>
+        <p><span>Места:</span> 2 — мама и Паша</p>
+        <p><span>Сеанс:</span> когда захочется</p>
+      </div>
+    </div>
+    <div class="stub" id="stub">ОТОРВИ →</div>
+  </div>
+  <p class="hint pulse" id="tearHint">🎟 Потяни правый корешок вправо, чтобы оторвать</p>
+  <p class="body tear-txt" id="tearTxt">И побольше киновечеров — чтобы расслабляться, обниматься и никуда не спешить 💛</p>
+  <div class="gate-status" data-gate-status="8">🔒 Оторви корешок билета, чтобы пройти дальше</div>
+</section>
+
+<!-- ==================== СЦЕНА 10: ЗАДУЙ СВЕЧИ ФЕНОМ (GATE 9) ==================== -->
+<section id="cakeSec" class="center gated-hidden" data-stage="8" data-gate="9">
+  <div class="kicker rv">процедура № 9 · желание</div>
+  <h2 class="t rv">Задуй свечи <em>феном!</em></h2>
+  <p class="body rv">Их ровно 18. Мы посчитали дважды.</p>
+  <div class="cake-stage" id="cakeStage">
+    <div class="cake-box">
+      <div class="candles" id="candles"></div>
+      <svg class="cake" viewBox="0 0 320 220">
+        <ellipse cx="160" cy="208" rx="148" ry="10" fill="#b76e7925"/>
+        <rect x="30" y="106" width="260" height="96" rx="18" fill="#e8b4a0"/>
+        <rect x="30" y="162" width="260" height="40" rx="14" fill="#d99a8a"/>
+        <path d="M30 118 q16 26 32 0 q16 26 32 0 q16 26 33 0 q16 26 33 0 q16 26 33 0 q16 26 33 0 q16 26 32 0 q16 26 32 0 v-14 h-260z" fill="#fff8f5"/>
+        <rect x="52" y="32" width="216" height="80" rx="16" fill="#b76e79"/>
+        <path d="M52 44 q14 22 27 0 q14 22 27 0 q14 22 27 0 q14 22 27 0 q14 22 27 0 q14 22 27 0 q14 22 27 0 q14 22 27 0 v-14 h-216z" fill="#fff8f5"/>
+        <text x="160" y="92" text-anchor="middle" font-family="Cormorant Infant,serif" font-style="italic" font-size="34" fill="#fff8f5">Мама · 18</text>
+      </svg>
+    </div>
+    <div id="dryerWrap">
+      <svg id="dryer" viewBox="0 0 160 140">
+        <g id="airG"></g>
+        <rect x="20" y="20" width="110" height="56" rx="28" fill="#b76e79"/>
+        <rect x="120" y="30" width="30" height="36" rx="8" fill="#7a3b4f"/>
+        <circle cx="48" cy="48" r="18" fill="#f7e9e4"/><circle cx="48" cy="48" r="8" fill="#b76e79"/>
+        <path d="M70 70 L62 130 h26 L96 70z" fill="#7a3b4f"/>
+        <rect x="68" y="90" width="16" height="8" rx="3" fill="#e8b4a0"/>
+      </svg>
+    </div>
+  </div>
+  <p class="hint pulse" id="dryerHint">💨 Зажми фен и поднеси к свечам, чтобы задуть все 18</p>
+  <div class="cake-wish" id="cakeWish">Загадала? ✨ Пусть всё сбудется.</div>
+  <div class="gate-status" data-gate-status="9">🔒 Зажми фен и задуй все 18 свечей</div>
+</section>
+
+<!-- ==================== СЦЕНА 11: ПОЛАРОИДЫ (GATE 10) ==================== -->
+<section id="polSec" class="center gated-hidden" data-stage="9" data-gate="10">
+  <div class="kicker rv">процедура № 10 · моменты</div>
+  <h2 class="t rv">Просто <em>ты</em></h2>
+  <p class="pol-counter" id="polCounter">Свайпни фото (осталось 6)</p>
+  <div class="stack" id="polStack"></div>
+  <button class="ghost pol-reset" id="polReset" type="button">Посмотреть стопку ещё раз ↺</button>
+  <div class="gate-status" data-gate-status="10">🔒 Пролистай все 6 фото свайпом в сторону</div>
+</section>
+
+<!-- ==================== СЦЕНА 12: ПИСЬМО И ФИНАЛ ==================== -->
+<section id="letterSec" class="center gated-hidden" data-stage="10">
+  <div class="kicker rv">от всего сердца</div>
+  <div class="letter" id="letter">
+    <p class="ln">Мама!</p>
+    <p class="ln">Спасибо за всё хорошее, и даже в местах за плохое — ведь даже плохое учило меня жизни)</p>
+    <p class="ln">Пусть этот год будет самым лёгким, тёплым и щедрым, и чтоб в следующий день рожденья ты осталась такой же доброй и неотразимой.</p>
+    <p class="ln">Мы тебя очень любим ❤️</p>
+  </div>
+</section>
+
+<section id="final" class="center gated-hidden" data-stage="10">
+  <div class="kicker">образ готов</div>
+  <h2 class="final-t">Тебе <em>18</em>.<br>Ты прекрасна.</h2>
+  <button class="goldbtn" id="shakeBtn" type="button">🎉 Встряхни телефон (или нажми)</button>
+  <button class="ghost" id="replayBtn" type="button">Пройти ещё раз ↺</button>
+</section>
+
+</main>
+
+<!-- Оверлей золотого дождя -->
+<div id="flood">
+  <h2>Купайся<br>в золоте! 💰</h2>
+  <p>Ты заслуживаешь каждой копейки.</p>
+  <button id="floodClose" type="button">Идём дальше ✨</button>
+</div>
+
+<!-- Лайтбокс для галереи работ -->
+<div id="lightbox">
+  <button id="lbClose" type="button" aria-label="Закрыть">✕</button>
+  <button id="lbPrev" type="button" aria-label="Назад">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button id="lbNext" type="button" aria-label="Вперёд">›</button>
+  <div class="cap" id="lbCap"></div>
+</div>
+
+<!-- Кастомные курсоры-инструменты (кисть и расчёска) -->
+<svg id="brush" class="cursor-tool" viewBox="0 0 64 64">
+  <rect x="28" y="20" width="8" height="40" rx="3" fill="#3b2230" stroke="#b76e79"/>
+  <rect x="27" y="14" width="10" height="8" fill="#e8b4a0"/>
+  <path d="M27 14 Q32 -2 37 14Z" fill="#b76e79"/>
+</svg>
+<svg id="combCur" class="cursor-tool" viewBox="0 0 120 40">
+  <rect x="0" y="0" width="120" height="14" rx="6" fill="#b76e79"/>
+  <g fill="#b76e79">
+    <rect x="6" y="10" width="4" height="26" rx="2"/><rect x="16" y="10" width="4" height="26" rx="2"/>
+    <rect x="26" y="10" width="4" height="26" rx="2"/><rect x="36" y="10" width="4" height="26" rx="2"/>
+    <rect x="46" y="10" width="4" height="26" rx="2"/><rect x="56" y="10" width="4" height="26" rx="2"/>
+    <rect x="66" y="10" width="4" height="26" rx="2"/><rect x="76" y="10" width="4" height="26" rx="2"/>
+    <rect x="86" y="10" width="4" height="26" rx="2"/><rect x="96" y="10" width="4" height="26" rx="2"/>
+    <rect x="106" y="10" width="4" height="26" rx="2"/>
+  </g>
+</svg>
+
+<script src="js/app.js"></script>
+</body>
+</html>
